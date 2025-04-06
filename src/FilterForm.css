@@ -1,0 +1,82 @@
+
+label {
+    font-size: 16px;
+    color: black;
+
+}
+.filter-modal {
+    width: 750px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background-color: white;
+}
+.modal-header {
+    background-color: #4db8ff;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-content {
+    padding: 20px;
+}
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.form-row label {
+    width: 100px;
+    margin-right: 10px;
+}
+.form-row select, .form-row input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+.remove-criteria {
+    color: pink;
+    cursor: pointer;
+}
+.selection-row {
+    margin-top: 15px;
+}
+.selection-row text{
+    color: black;
+}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+.btn {
+    padding: 8px 15px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn-close {
+    background-color: #ccc;
+    color: black;
+}
+.btn-save {
+    background-color: #007bff;
+    color: white;
+}
+.form-row {
+    border: 1px solid grey;
+}
+
+.criteria-row {
+    margin-right: 0px;
+    margin-left: auto;
+    float: right;
+}
+
+.criteria-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
