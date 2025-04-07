@@ -7,4 +7,16 @@ export class Criterion {
     }
 }
 
+export function getTypeComparator(type) {
+    switch (type) {
+        case 'amount':
+        default:
+            return ['more', 'less', 'equals'];
+        case 'title':
+            return ['starts_with', 'contains', 'ends_with'];
+        case 'date':
+            return ['to', 'from', 'exactly'];
+    }
+}
+
 export default  Criterion;

@@ -6,59 +6,42 @@ import CriteriaRow from "./CriteriaRow";
 import ReactDOM from "react-dom/client";
 
 let count = 0;
-let criteriaContainerRoot = null;
-let form = null;
 
 function FilterForm({filterData}) {
-    const newFilterFormRef = useRef(null);
-
-    useEffect(() => {
-        form = newFilterFormRef.current;
-        const criteriaContainer = form.querySelector('.criteria-container');
-        criteriaContainerRoot = ReactDOM.createRoot(criteriaContainer);
-    }, []);
-
     const [filter, setFilter] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-
+    const [filterName, setFilterName] = useState(filterData?.name || '');
+    const [selection, setSelection] = useState(filterData?.selection || '');
+    const newFilterFormRef = useRef(null);
+    const [form, setForm] = useState(null);
+    const [criteriaContainer, setCriteriaContainer] = useState(null);
+    const criteriaContainerRoot = useRef(null);
+    const [criteria, setCriteria] = useState([]);
 
     useEffect(() => {
-        alertLog("FilterForm useEffec filterData");
+        alert(' const currentCriteriaContainer = currentForm.querySelector(.criterias');
+
+        const currentForm = newFilterFormRef.current;
+        const currentCriteriaContainer = currentForm.querySelector('.criteria-container');
+        const currentCriteriaContainerRoot = ReactDOM.createRoot(currentCriteriaContainer);
+
+        setForm(currentForm);
+        setCriteriaContainer(currentCriteriaContainer);
+        criteriaContainerRoot.current = currentCriteriaContainerRoot;
+    }, []);
+
+    useEffect(() => {
+        alert('FilterForm useEffect flterdara muutus');
+
+
+        alertLog("FilterForm useEffect filterData");
         alertLog(JSON.stringify(filterData));
 
         showForm();
-
         populateForm(filterData);
         markFinished();
-        /*const getFilter = async (id) => {
-            if (!id) {
-                alertLog('noid ' +id) ;
-                return;
-            }
-            alertLog('getFilter' +id) ;
-            setLoading(true);
-            setError(null);
-
-            try {
-                alertLog("FilterForm useEffect " +id) ;
-                const response = await fetch(Database.GET_FILTER+id);
-                alertLog('response') ;
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setFilter(data);
-                populateForm(data);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false); // Clear loading state
-            }
-        };*/
-    }, [filterData]); // Run the effect whenever the filterData changes
-
+    }, [filterData]);
 
     function populateForm(data) {
         alertLog("populate form", 2);
@@ -74,34 +57,20 @@ function FilterForm({filterData}) {
         alertLog('form is ' + form, 1);
         if (form) {
             alertLog('form is found, now showing', 2)
-            // show the form
             form.style.display = 'block';
         }
     }
 
     function closeForm() {
-
         emptyForm();
+
         if (form) {
-            // Hide the form
-            //form.style.display = 'none';
-
-            // Or, if you prefer to use a class for styling:
-            // form.classList.add('hidden'); // Assuming you have a CSS class named 'hidden'
+            form.style.display = 'none';
         }
-        // close form
-        // remove form from DOM
-        // clear filter form values
-        // remove all criterion rows
-        // empty all values
-
     }
 
     function emptyForm() {
         alertLog('emptyForm', 2)
-        // clear filter form
-        // remove all criterion rows
-        // empty all values
 
         if (form) {
             const filterNameInput = form.querySelector('#filterName');
@@ -112,40 +81,24 @@ function FilterForm({filterData}) {
             criteriaRows.forEach(row => row.remove());
         }
         alertLog('form after empty: ' + newFilterFormRef.current, 2)
-
     }
 
-    function addFilterCriteriaRow() {
-        alertLog('addFilterCriteriaRow', 2)
-        // find ,creteria-container
-        // create new criterion row
-        // append new criterion row to criteria-container
+    function addFilterCriteriaRow()  {
+        const newCriterion = { id: Date.now(), type: "amount", comparator: "more", value: "" };
+        setCriteria([...criteria, newCriterion]); // Update the criteria state
+    }
 
-
-        let newCriterionRow = <CriteriaRow index={Date.now()} filterCriteria={null}/>;
-
-//        ReactDOM.render(<CriteriaRow key={null} filterCriteria={null} />, newCriterionRow);
-        alertLog('criteriaContainer: ' , 2);
-        alertLog('newCriterionRow: ' + newCriterionRow, 2);
-        if (criteriaContainerRoot) {
-            criteriaContainerRoot.render(newCriterionRow);
-            alertLog('addFilterCriteriaRow - ROW ADDED', 2);
+    useEffect(() => { // Re-render whenever criteria changes
+        if (criteriaContainerRoot.current) {
+            const criteriaRows = criteria.map((criterion) => (
+                <CriteriaRow key={criterion.id} index={criterion.id} filterCriteria={criterion} />
+            ));
+            criteriaContainerRoot.current.render(criteriaRows); // Render the array of rows
         }
-        alertLog('criteriaContainer after: ' , 2);
-        alertLog('newCriterionRow after: ' + newCriterionRow, 2);
+    }, [criteria]);
 
 
-    }
-
-    // temp
     function markFinished() {
-        // add .green-background to form elements that got the value
-        // add .red-background to form elements that did not get the value
-        // add .yellow-background to form elements that got the value but not the right one
-        // add .green-background to radiobutton form elements that got the value and the right one
-        // add .red-background to radiobutton form elements that did not get the value
-        // add .yellow-background to radiobutton form elements that got the value but not the right one
-
 
         if (form) {
             const filterNameInput = form.querySelector('#filterName');
@@ -166,33 +119,9 @@ function FilterForm({filterData}) {
                 });
             });
         }
-
-        /*
-        if (form) {
-            const filterNameInput = form.querySelector('#filterName');
-            if (filterNameInput && filterNameInput.value) {
-                filterNameInput.classList.add('green-background');
-            } else {
-                filterNameInput.classList.add('red-background');
-            }
-            const criteriaRows = form.querySelectorAll('.criteria-row');
-            criteriaRows.forEach(row => {
-                const inputs = row.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    if (input.value) {
-                        input.classList.add('green-background');
-                    } else {
-                        input.classList.add('red-background');
-                    }
-                });
-            });
-        }*/
     }
 
-    // temp
     function alertLog(text, level = 0) {
-
-
         if (level === 1) {
             alert(text);
             console.debug(text);
@@ -202,7 +131,6 @@ function FilterForm({filterData}) {
             console.debug(count + " --- " + text);
         } else
             console.log(text);
-
     }
 
     return (
@@ -217,17 +145,15 @@ function FilterForm({filterData}) {
                 <div className="modal-content">
                     <div className="form-row">
                         <label>Filter name</label>
-                        <input id="filterName" type="text" value={filterData?.name}/>
+                        <input id="filterName" type="text" value={filterName} onChange={(e) => setFilterName(e.target.value)}/>
                     </div>
 
                     <div className="form-row">
                         <label>Criteria</label>
                         <span className="criteria-container">
-
-                        {filterData?.criteria?.map((criterion, index) => (
-                            <CriteriaRow key={Date.now()} filterCriteria={criterion}/>
-                        ))}
-
+                            {filterData?.criteria?.map((criterion, index) => (
+                                <CriteriaRow key={index} filterCriteria={criterion}/>
+                            ))}
                         </span>
                     </div>
 
@@ -237,12 +163,9 @@ function FilterForm({filterData}) {
 
                     <div className="form-row">
                         <label>Usage</label>
-                        <input type="radio" name="selection" value="common"
-                               checked={filterData?.selection === 'common'}/>Common
-                        <input type="radio" name="selection" value="rare"
-                               checked={filterData?.selection === 'rare'}/>Rare
-                        <input type="radio" name="selection" value="special"
-                               checked={filterData?.selection === 'special'}/>Special
+                        <input type="radio" name="selection" value="common" checked={selection === 'common'} onChange={() => setSelection('common')}/>Common
+                        <input type="radio" name="selection" value="rare" checked={selection === 'rare'} onChange={() => setSelection('rare')}/>Rare
+                        <input type="radio" name="selection" value="special" checked={selection === 'special'} onChange={() => setSelection('special')}/>Special
                     </div>
                 </div>
 
@@ -253,7 +176,6 @@ function FilterForm({filterData}) {
             </div>
         </div>
     );
-
 }
 
 export default FilterForm;
