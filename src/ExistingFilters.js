@@ -8,11 +8,13 @@ function ExistingFilters({onDataChange: openFilterToEdit}) {
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null);     // Add error state
 
+    // Function to handle the "edit filter" button click
     const handleEdit = (filter) => {
         alert('handleEdit Edit filter with ID: ' + filter.id);
         openFilterToEdit(filter); // Call the callback function and pass the data
     };
 
+    // Fetch existing filters from the API when the component mounts
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true); // Set loading to true before fetching

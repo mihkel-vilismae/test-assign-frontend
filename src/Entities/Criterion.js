@@ -7,6 +7,11 @@ export class Criterion {
     }
 }
 
+//get default values for criterion
+export function getDefaultCriterion() {
+    return new Criterion(Date.now(), 'amount', 'more', '');
+}
+
 export function getTypeComparator(type) {
     switch (type) {
         case 'amount':

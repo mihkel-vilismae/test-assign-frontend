@@ -4,6 +4,8 @@ import * as Database from "./Database";
 import {useParams} from 'react-router-dom';
 import CriteriaRow from "./CriteriaRow";
 import ReactDOM from "react-dom/client";
+import Criterion, { getDefaultCriterion } from './Entities/Criterion';
+
 
 let count = 0;
 
@@ -11,17 +13,16 @@ function FilterForm({filterData}) {
     const [filter, setFilter] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [filterName, setFilterName] = useState(filterData?.name || '');
-    const [selection, setSelection] = useState(filterData?.selection || '');
+    const [filterName, setFilterName] = useState('');
+    const [selection, setSelection] = useState('');
     const newFilterFormRef = useRef(null);
     const [form, setForm] = useState(null);
     const [criteriaContainer, setCriteriaContainer] = useState(null);
     const criteriaContainerRoot = useRef(null);
     const [criteria, setCriteria] = useState([]);
 
+    // initializes variables
     useEffect(() => {
-        alert(' const currentCriteriaContainer = currentForm.querySelector(.criterias');
-
         const currentForm = newFilterFormRef.current;
         const currentCriteriaContainer = currentForm.querySelector('.criteria-container');
         const currentCriteriaContainerRoot = ReactDOM.createRoot(currentCriteriaContainer);
@@ -31,11 +32,10 @@ function FilterForm({filterData}) {
         criteriaContainerRoot.current = currentCriteriaContainerRoot;
     }, []);
 
+
+    // filterData is changed, initializes the form with the filterData
     useEffect(() => {
-        alert('FilterForm useEffect flterdara muutus');
-
-
-        alertLog("FilterForm useEffect filterData");
+        alertLog("FilterForm useEffect- filterData is set");
         alertLog(JSON.stringify(filterData));
 
         showForm();
@@ -43,16 +43,45 @@ function FilterForm({filterData}) {
         markFinished();
     }, [filterData]);
 
-    function populateForm(data) {
-        alertLog("populate form", 2);
-        alertLog(data, 2);
-    }
+     function populateForm(filterData) {
+         setFilterName(filterData?.name || '');
+         setSelection(filterData?.selection || '');
+         setCriteria(filterData?.criteria || []);
+     }
 
-    function saveForm() {
-        alertLog('saveForm', 2)
-    }
+    useEffect(() => { // Re-render whenever criteria changes
+        //alertLog(' criteria changede, renders rowws',3)
+        if (criteriaContainerRoot.current) {
+            const criteriaRows = criteria.map((criterion) => (
+                <CriteriaRow
+                    filterCriteria={criterion}
+                    key={criterion.id}
+                    index={criterion.id}
+                    onRemove={handleRemoveCriteria}
+                    /* onChange={handleCriterionChange}
+                     onRemove={handleCriterionRemove}*/
+                />
+            ));
+            criteriaContainerRoot.current.render(criteriaRows); // Render the array of rows
+        }
+    }, [criteria]);
 
+    // handleRemoveCriteria is called when the remove button is clicked, remove the criterion row
+    const handleRemoveCriteria = (index) => {
+        //alertLog('handleRemoveCriteria '+index, 3);
+        /*     setCriteria(prevCriteria => prevCriteria.filter((_, i) => i !== index));*/
+        setCriteria(previousCriteria => {
+            return previousCriteria.filter((criterion, currentIndex) => {
+                return criterion.id !== index; // Keep only criteria whose index is NOT the one to remove
+            });
+        });
+        alertLog('handleRemoveCriteria done, should call render...', 3);
+
+    };
+
+    // showForm is called when the filterData is set
     function showForm() {
+        emptyForm();
         alertLog('showForm', 2)
         alertLog('form is ' + form, 1);
         if (form) {
@@ -61,14 +90,15 @@ function FilterForm({filterData}) {
         }
     }
 
+    // closeForm is called when the close button is clicked
     function closeForm() {
         emptyForm();
-
         if (form) {
             form.style.display = 'none';
         }
     }
 
+    // emptyForm is called when the form is about to be shown or closed
     function emptyForm() {
         alertLog('emptyForm', 2)
 
@@ -83,23 +113,31 @@ function FilterForm({filterData}) {
         alertLog('form after empty: ' + newFilterFormRef.current, 2)
     }
 
+    // addFilterCriteriaRow is called when the "+ Add Row" button is clicked, add new criterion row
     function addFilterCriteriaRow()  {
-        const newCriterion = { id: Date.now(), type: "amount", comparator: "more", value: "" };
+        alertLog('addFilterCriteriaRow', 3)
+       // const newCriterion = { id: Date.now(), type: "amount", comparator: "more", value: "" };
+        const newCriterion = getDefaultCriterion();
         setCriteria([...criteria, newCriterion]); // Update the criteria state
     }
 
-    useEffect(() => { // Re-render whenever criteria changes
-        if (criteriaContainerRoot.current) {
-            const criteriaRows = criteria.map((criterion) => (
-                <CriteriaRow key={criterion.id} index={criterion.id} filterCriteria={criterion} />
-            ));
-            criteriaContainerRoot.current.render(criteriaRows); // Render the array of rows
-        }
-    }, [criteria]);
+   /* function handleCriterionChange(index, updatedCriterion) {
+        setCriteria(prevCriteria => prevCriteria.map((criterion, i) => i === index ? updatedCriterion : criterion));
+    }
+
+    function handleCriterionRemove(index) {
+        setCriteria(prevCriteria => prevCriteria.filter((_, i) => i !== index));
+    }
+*/
+
+
+    function saveForm() {
+        alertLog('saveForm', 2)
+    }
 
 
     function markFinished() {
-
+        return;
         if (form) {
             const filterNameInput = form.querySelector('#filterName');
             if (filterNameInput && filterNameInput.value) {
@@ -122,12 +160,17 @@ function FilterForm({filterData}) {
     }
 
     function alertLog(text, level = 0) {
+        if (level === 3) {
+            count++;
+            alert(count + " --- " + text);
+            console.debug(count + " --- " + text);
+        }
         if (level === 1) {
-            alert(text);
+            //alert(text);
             console.debug(text);
         } else if (level === 2) {
             count++;
-            alert(count + " --- " + text);
+            // alert(count + " --- " + text);
             console.debug(count + " --- " + text);
         } else
             console.log(text);
@@ -152,7 +195,11 @@ function FilterForm({filterData}) {
                         <label>Criteria</label>
                         <span className="criteria-container">
                             {filterData?.criteria?.map((criterion, index) => (
-                                <CriteriaRow key={index} filterCriteria={criterion}/>
+                                <CriteriaRow
+                                    index={index}
+                                    key={index}
+                                    filterCriteria={criterion}
+                                    onRemove={handleRemoveCriteria} />
                             ))}
                         </span>
                     </div>
