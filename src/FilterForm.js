@@ -2,14 +2,26 @@ import React, {useEffect, useRef, useState} from 'react';
 import './FilterForm.css';
 import * as Database from "./Database";
 import {useParams} from 'react-router-dom';
+import CriteriaRow from "./CriteriaRow";
+import ReactDOM from "react-dom/client";
 
 let count = 0;
+let criteriaContainerRoot = null;
+let form = null;
+
 function FilterForm({filterData}) {
+    const newFilterFormRef = useRef(null);
+
+    useEffect(() => {
+        form = newFilterFormRef.current;
+        const criteriaContainer = form.querySelector('.criteria-container');
+        criteriaContainerRoot = ReactDOM.createRoot(criteriaContainer);
+    }, []);
 
     const [filter, setFilter] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const newFilterFormRef = useRef(null);
+
 
 
     useEffect(() => {
@@ -19,6 +31,7 @@ function FilterForm({filterData}) {
         showForm();
 
         populateForm(filterData);
+        markFinished();
         /*const getFilter = async (id) => {
             if (!id) {
                 alertLog('noid ' +id) ;
@@ -48,31 +61,30 @@ function FilterForm({filterData}) {
 
 
     function populateForm(data) {
-        alertLog("populate form",2);
-        alertLog(data,2);
+        alertLog("populate form", 2);
+        alertLog(data, 2);
     }
 
     function saveForm() {
-        alertLog('saveForm',2)
+        alertLog('saveForm', 2)
     }
 
     function showForm() {
-        alertLog('showForm',2)
-        const form = newFilterFormRef.current;
-        alertLog('form is ' + form,1);
+        alertLog('showForm', 2)
+        alertLog('form is ' + form, 1);
         if (form) {
-            alertLog('form is found, now showing',2)
+            alertLog('form is found, now showing', 2)
             // show the form
             form.style.display = 'block';
         }
     }
 
     function closeForm() {
-        const form = newFilterFormRef.current;
+
         emptyForm();
         if (form) {
             // Hide the form
-            form.style.display = 'none';
+            //form.style.display = 'none';
 
             // Or, if you prefer to use a class for styling:
             // form.classList.add('hidden'); // Assuming you have a CSS class named 'hidden'
@@ -86,11 +98,11 @@ function FilterForm({filterData}) {
     }
 
     function emptyForm() {
-        alertLog('emptyForm',2)
+        alertLog('emptyForm', 2)
         // clear filter form
         // remove all criterion rows
         // empty all values
-        const form = newFilterFormRef.current;
+
         if (form) {
             const filterNameInput = form.querySelector('#filterName');
             if (filterNameInput) {
@@ -99,30 +111,97 @@ function FilterForm({filterData}) {
             const criteriaRows = form.querySelectorAll('.criteria-row');
             criteriaRows.forEach(row => row.remove());
         }
-        alertLog('form after empty: '+ newFilterFormRef.current ,2)
+        alertLog('form after empty: ' + newFilterFormRef.current, 2)
 
     }
 
     function addFilterCriteriaRow() {
-        alertLog('addFilterCriteriaRow',2)
-        // add new criterion row
-        // generate default criterion row
-        // append new criterion row to form
+        alertLog('addFilterCriteriaRow', 2)
+        // find ,creteria-container
+        // create new criterion row
+        // append new criterion row to criteria-container
+
+
+        let newCriterionRow = <CriteriaRow index={Date.now()} filterCriteria={null}/>;
+
+//        ReactDOM.render(<CriteriaRow key={null} filterCriteria={null} />, newCriterionRow);
+        alertLog('criteriaContainer: ' , 2);
+        alertLog('newCriterionRow: ' + newCriterionRow, 2);
+        if (criteriaContainerRoot) {
+            criteriaContainerRoot.render(newCriterionRow);
+            alertLog('addFilterCriteriaRow - ROW ADDED', 2);
+        }
+        alertLog('criteriaContainer after: ' , 2);
+        alertLog('newCriterionRow after: ' + newCriterionRow, 2);
+
+
     }
-    
-    function alertLog(text, level=0) {
+
+    // temp
+    function markFinished() {
+        // add .green-background to form elements that got the value
+        // add .red-background to form elements that did not get the value
+        // add .yellow-background to form elements that got the value but not the right one
+        // add .green-background to radiobutton form elements that got the value and the right one
+        // add .red-background to radiobutton form elements that did not get the value
+        // add .yellow-background to radiobutton form elements that got the value but not the right one
+
+
+        if (form) {
+            const filterNameInput = form.querySelector('#filterName');
+            if (filterNameInput && filterNameInput.value) {
+                filterNameInput.classList.add('green-background');
+            } else {
+                filterNameInput.classList.add('red-background');
+            }
+            const criteriaRows = form.querySelectorAll('.criteria-row');
+            criteriaRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (input.value) {
+                        input.classList.add('green-background');
+                    } else {
+                        input.classList.add('red-background');
+                    }
+                });
+            });
+        }
+
+        /*
+        if (form) {
+            const filterNameInput = form.querySelector('#filterName');
+            if (filterNameInput && filterNameInput.value) {
+                filterNameInput.classList.add('green-background');
+            } else {
+                filterNameInput.classList.add('red-background');
+            }
+            const criteriaRows = form.querySelectorAll('.criteria-row');
+            criteriaRows.forEach(row => {
+                const inputs = row.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (input.value) {
+                        input.classList.add('green-background');
+                    } else {
+                        input.classList.add('red-background');
+                    }
+                });
+            });
+        }*/
+    }
+
+    // temp
+    function alertLog(text, level = 0) {
 
 
         if (level === 1) {
-            alert( text);
+            alert(text);
             console.debug(text);
         } else if (level === 2) {
             count++;
-            alert(count + " --- "+text);
-            console.debug(count + " --- "+text);
-        }
-        else
-        console.log(text);
+            alert(count + " --- " + text);
+            console.debug(count + " --- " + text);
+        } else
+            console.log(text);
 
     }
 
@@ -145,70 +224,9 @@ function FilterForm({filterData}) {
                         <label>Criteria</label>
                         <span className="criteria-container">
 
-                    {filterData?.criteria?.map((criterion, index) => (
-                        <div className="criteria-row" key={index}>
-                            <select value={criterion.type}>
-                                <option value="amount">Amount</option>
-                                <option value="title">Title</option>
-                                <option value="date">Date</option>
-                            </select>
-
-                            {criterion.type === 'amount' && (
-                                <span>
-                                    <select value={criterion.comparator}>
-                                        <option value="more">More</option>
-                                        <option value="less">Less</option>
-                                        <option value="equals">Equals</option>
-                                    </select>
-                                    <input type="number" value={criterion.value}/>
-                                </span>
-                            )}
-
-                            {criterion.type === 'title' && (
-                                <span>
-                                    <select value={criterion.comparator}>
-                                        <option value="more">More</option>
-                                        <option value="less">Less</option>
-                                        <option value="equals">Equals</option>
-                                    </select>
-                                    <input type="text" value={criterion.value}/>
-                                </span>
-                            )}
-
-                            {criterion.type === 'date' && (
-                                <span>
-                                     <select value={criterion.comparator}>
-                                        <option value="to">To</option>
-                                        <option value="from">From</option>
-                                        <option value="exactly">Exactly</option>
-                                    </select>
-                                    <input type="date" value={criterion.date}/>
-                                </span>
-                            )}
-                            <span className="remove-criteria">✖</span>
-                        </div>
-                    ))}
-
-                            {/*         <div className="criteria-row">
-                            <select>
-                                <option value="amount">Amount</option>
-                                <option value="title">Title</option>
-                                <option value="date">Date</option>
-                            </select>
-                            <select>
-                                <option value="more">More</option>
-                                <option value="less">Less</option>
-                                <option value="equals">Equals</option>
-                            </select>
-                            <select>
-                                <option value="starts_with">Starts with</option>
-                                <option value="ends_with">Ends with</option>
-                                <option value="contains">Contains</option>
-                            </select>
-                            <input type="text"/>
-                            <span className="remove-criteria">✖</span>
-                        </div>*/}
-
+                        {filterData?.criteria?.map((criterion, index) => (
+                            <CriteriaRow key={Date.now()} filterCriteria={criterion}/>
+                        ))}
 
                         </span>
                     </div>

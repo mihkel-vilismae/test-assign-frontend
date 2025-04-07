@@ -10,3 +10,4 @@ export const GET = getApiUrl() + "/filters";
 export const UPDATE = getApiUrl() + "/update";
 
 export const GET_FILTER = getApiUrl() + "/filter/";
+
