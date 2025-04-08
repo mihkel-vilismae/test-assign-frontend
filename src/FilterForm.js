@@ -1,18 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './FilterForm.css';
 import * as Database from "./Database";
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CriteriaRow from "./CriteriaRow";
 import ReactDOM from "react-dom/client";
 import Criterion, { getDefaultCriterion } from './Entities/Criterion';
 
-
 let count = 0;
 
-function FilterForm({filterData}) {
-    const [filter, setFilter] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+function FilterForm({ filterData }) {
     const [filterName, setFilterName] = useState('');
     const [selection, setSelection] = useState('');
     const newFilterFormRef = useRef(null);
@@ -43,98 +39,71 @@ function FilterForm({filterData}) {
         markFinished();
     }, [filterData]);
 
-     function populateForm(filterData) {
-         setFilterName(filterData?.name || '');
-         setSelection(filterData?.selection || '');
-         setCriteria(filterData?.criteria || []);
-     }
+    function populateForm(filterData) {
+        setFilterName(filterData?.name || '');
+        setSelection(filterData?.selection || '');
+        setCriteria(filterData?.criteria || []);
+    }
 
     useEffect(() => { // Re-render whenever criteria changes
-        //alertLog(' criteria changede, renders rowws',3)
         if (criteriaContainerRoot.current) {
+            alert(JSON.stringify(criteria))
             const criteriaRows = criteria.map((criterion) => (
                 <CriteriaRow
                     filterCriteria={criterion}
                     key={criterion.id}
                     index={criterion.id}
                     onRemove={handleRemoveCriteria}
-                    /* onChange={handleCriterionChange}
-                     onRemove={handleCriterionRemove}*/
                 />
             ));
-            criteriaContainerRoot.current.render(criteriaRows); // Render the array of rows
+            criteriaContainerRoot.current.render(criteriaRows);
         }
     }, [criteria]);
 
     // handleRemoveCriteria is called when the remove button is clicked, remove the criterion row
     const handleRemoveCriteria = (index) => {
-        //alertLog('handleRemoveCriteria '+index, 3);
-        /*     setCriteria(prevCriteria => prevCriteria.filter((_, i) => i !== index));*/
-        setCriteria(previousCriteria => {
-            return previousCriteria.filter((criterion, currentIndex) => {
-                return criterion.id !== index; // Keep only criteria whose index is NOT the one to remove
-            });
-        });
+        alertLog(`handleRemoveCriteria - Removing criterion at index ${index}`, 3);
+        setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== index));
         alertLog('handleRemoveCriteria done, should call render...', 3);
-
     };
 
     // showForm is called when the filterData is set
     function showForm() {
         emptyForm();
-        alertLog('showForm', 2)
+        alertLog('showForm', 2);
         alertLog('form is ' + form, 1);
         if (form) {
-            alertLog('form is found, now showing', 2)
-            form.style.display = 'block';
-        }
+            alertLog('form is found, now showing', 2);
+            form.setAttribute('style', 'display: block;');
+        } else alertLog('form is not found', 2);
     }
 
     // closeForm is called when the close button is clicked
     function closeForm() {
         emptyForm();
         if (form) {
-            form.style.display = 'none';
-        }
+            form.setAttribute('style', 'display: none;');
+        }else alertLog('form is not found', 2);
     }
 
     // emptyForm is called when the form is about to be shown or closed
     function emptyForm() {
-        alertLog('emptyForm', 2)
-
-        if (form) {
-            const filterNameInput = form.querySelector('#filterName');
-            if (filterNameInput) {
-                filterNameInput.value = '';
-            }
-            const criteriaRows = form.querySelectorAll('.criteria-row');
-            criteriaRows.forEach(row => row.remove());
-        }
-        alertLog('form after empty: ' + newFilterFormRef.current, 2)
+        alertLog('emptyForm', 2);
+        setFilterName('');
+        setCriteria([]);
+        alertLog('form after empty: ' + newFilterFormRef.current, 2);
     }
 
     // addFilterCriteriaRow is called when the "+ Add Row" button is clicked, add new criterion row
-    function addFilterCriteriaRow()  {
-        alertLog('addFilterCriteriaRow', 3)
-       // const newCriterion = { id: Date.now(), type: "amount", comparator: "more", value: "" };
+    function addFilterCriteriaRow() {
+        alertLog('addFilterCriteriaRow', 3);
         const newCriterion = getDefaultCriterion();
-        setCriteria([...criteria, newCriterion]); // Update the criteria state
+        setCriteria([...criteria, newCriterion]);
     }
-
-   /* function handleCriterionChange(index, updatedCriterion) {
-        setCriteria(prevCriteria => prevCriteria.map((criterion, i) => i === index ? updatedCriterion : criterion));
-    }
-
-    function handleCriterionRemove(index) {
-        setCriteria(prevCriteria => prevCriteria.filter((_, i) => i !== index));
-    }
-*/
-
 
     function saveForm() {
-        alertLog('saveForm', 2)
+        alertLog('saveForm', 2);
     }
-
 
     function markFinished() {
         return;
@@ -166,11 +135,9 @@ function FilterForm({filterData}) {
             console.debug(count + " --- " + text);
         }
         if (level === 1) {
-            //alert(text);
             console.debug(text);
         } else if (level === 2) {
             count++;
-            // alert(count + " --- " + text);
             console.debug(count + " --- " + text);
         } else
             console.log(text);
@@ -188,31 +155,25 @@ function FilterForm({filterData}) {
                 <div className="modal-content">
                     <div className="form-row">
                         <label>Filter name</label>
-                        <input id="filterName" type="text" value={filterName} onChange={(e) => setFilterName(e.target.value)}/>
+                        <input id="filterName" type="text" value={filterName} onChange={(e) => setFilterName(e.target.value)} />
                     </div>
 
                     <div className="form-row">
                         <label>Criteria</label>
                         <span className="criteria-container">
-                            {filterData?.criteria?.map((criterion, index) => (
-                                <CriteriaRow
-                                    index={index}
-                                    key={index}
-                                    filterCriteria={criterion}
-                                    onRemove={handleRemoveCriteria} />
-                            ))}
+
                         </span>
                     </div>
 
                     <div className="form-row">
-                        <button onClick={addFilterCriteriaRow}>+ Add Row</button>
+                        <button className={"mx-auto btn btn-light"} onClick={addFilterCriteriaRow}>+ Add Row</button>
                     </div>
 
                     <div className="form-row">
                         <label>Usage</label>
-                        <input type="radio" name="selection" value="common" checked={selection === 'common'} onChange={() => setSelection('common')}/>Common
-                        <input type="radio" name="selection" value="rare" checked={selection === 'rare'} onChange={() => setSelection('rare')}/>Rare
-                        <input type="radio" name="selection" value="special" checked={selection === 'special'} onChange={() => setSelection('special')}/>Special
+                        <input type="radio" name="selection" value="common" checked={selection === 'common'} onChange={() => setSelection('common')} />Common
+                        <input type="radio" name="selection" value="rare" checked={selection === 'rare'} onChange={() => setSelection('rare')} />Rare
+                        <input type="radio" name="selection" value="special" checked={selection === 'special'} onChange={() => setSelection('special')} />Special
                     </div>
                 </div>
 
