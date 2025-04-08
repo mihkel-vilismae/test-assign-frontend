@@ -11,3 +11,21 @@ export const UPDATE = getApiUrl() + "/update";
 
 export const GET_FILTER = getApiUrl() + "/filter/";
 
+
+
+export const alertLog = (text, level = 0) => {
+    return;
+    let count = 0;
+    if (level === 3) {
+        count++;
+        alert(count + " --- " + text);
+        console.debug(count + " --- " + text);
+    }
+    if (level === 1) {
+        console.debug(text);
+    } else if (level === 2) {
+        count++;
+        console.debug(count + " --- " + text);
+    } else
+        console.log(text);
+}

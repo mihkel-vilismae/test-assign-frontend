@@ -21,10 +21,15 @@ label {
 .modal-content {
     padding: 20px;
 }
+
 .form-row {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    border: 1px solid grey;
+    padding: 10px;
+   /* margin-bottom: 10px;
+    margin-top: 10px;*/
 }
 .form-row label {
     width: 100px;
@@ -65,23 +70,104 @@ label {
     background-color: #007bff;
     color: white;
 }
-.form-row {
-    border: 1px solid grey;
-}
+
 
 .criteria-row {
-    margin-right: 0px;
-    margin-left: auto;
+    /*margin-right: 0px;
+    margin-left: auto;*/
     float: right;
 }
 
 .criteria-container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    width: 100%;
 }
 
 .green-background {
     background-color: green;
     //color: white;
+}
+
+/* styles.css */
+
+
+
+.form-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 15px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.radio-input {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.radio-input:checked + label {
+    color: #007BFF;
+}
+
+.input-field {
+    width: 30%; /* Adjust the width as needed */
+    max-width: 300px; /* Optional: Set a maximum width */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+/**/
+/* styles.css */
+
+#existing-filters {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+#existing-filters th, #existing-filters td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+#existing-filters th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+#existing-filters tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#existing-filters tr:hover {
+    background-color: #f1f1f1;
+}
+
+.edit-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    padding-left: 20px;
+    margin: 0;
 }

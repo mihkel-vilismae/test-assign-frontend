@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './FilterForm.css';
 import * as Database from "./Database";
+import { alertLog } from "./Database";
 import { useParams } from 'react-router-dom';
 import CriteriaRow from "./CriteriaRow";
 import ReactDOM from "react-dom/client";
@@ -47,13 +48,15 @@ function FilterForm({ filterData }) {
 
     useEffect(() => { // Re-render whenever criteria changes
         if (criteriaContainerRoot.current) {
-            alert(JSON.stringify(criteria))
+            alertLog(JSON.stringify(criteria))
             const criteriaRows = criteria.map((criterion) => (
                 <CriteriaRow
                     filterCriteria={criterion}
                     key={criterion.id}
                     index={criterion.id}
                     onRemove={handleRemoveCriteria}
+                    onChange={()=>  alert('onChange jee')}
+
                 />
             ));
             criteriaContainerRoot.current.render(criteriaRows);
@@ -128,20 +131,6 @@ function FilterForm({ filterData }) {
         }
     }
 
-    function alertLog(text, level = 0) {
-        if (level === 3) {
-            count++;
-            alert(count + " --- " + text);
-            console.debug(count + " --- " + text);
-        }
-        if (level === 1) {
-            console.debug(text);
-        } else if (level === 2) {
-            count++;
-            console.debug(count + " --- " + text);
-        } else
-            console.log(text);
-    }
 
     return (
         <div className="new-filter-form" id={"new-filter-form"} ref={newFilterFormRef}>
@@ -155,7 +144,8 @@ function FilterForm({ filterData }) {
                 <div className="modal-content">
                     <div className="form-row">
                         <label>Filter name</label>
-                        <input id="filterName" type="text" value={filterName} onChange={(e) => setFilterName(e.target.value)} />
+                        <input id="filterName" className="input-field" type="text" value={filterName}
+                               onChange={(e) => setFilterName(e.target.value)}/>
                     </div>
 
                     <div className="form-row">
@@ -170,11 +160,24 @@ function FilterForm({ filterData }) {
                     </div>
 
                     <div className="form-row">
-                        <label>Usage</label>
-                        <input type="radio" name="selection" value="common" checked={selection === 'common'} onChange={() => setSelection('common')} />Common
-                        <input type="radio" name="selection" value="rare" checked={selection === 'rare'} onChange={() => setSelection('rare')} />Rare
-                        <input type="radio" name="selection" value="special" checked={selection === 'special'} onChange={() => setSelection('special')} />Special
+                        <label className="form-label">Usage</label>
+                        <div className="radio-group">
+                            <label className="radio-label">
+                                <input type="radio" name="selection" value="common" checked={selection === 'common'}
+                                       onChange={() => setSelection('common')}/>Common
+                            </label>
+                            <label className="radio-label">
+                                <input type="radio" name="selection" value="rare" checked={selection === 'rare'}
+                                       onChange={() => setSelection('rare')}/>Rare
+                            </label>
+                            <label className="radio-label">
+                                <input type="radio" name="selection" value="special" checked={selection === 'special'}
+                                       onChange={() => setSelection('special')}/>Special
+                            </label>
+                        </div>
                     </div>
+
+
                 </div>
 
                 <div className="modal-footer">

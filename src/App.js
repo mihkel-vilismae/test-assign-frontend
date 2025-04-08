@@ -4,24 +4,24 @@ import './App.css';
 import ExistingFilters from "./ExistingFilters";
 import FilterForm from "./FilterForm";
 import {BrowserRouter} from 'react-router-dom'; // Or other Router type
-
+import {alertLog} from "./Database";
 
 function App() {
     const [editFilterFromChild, setEditFilterFromChild] = useState(null);
     const [filters, setFilters] = useState([]);
 
     const openModal = () => {
-        alert("Open modal - not implemented" );
+        alertLog("Open modal - not implemented" );
     };
 
 
 
     const saveFilter = (event) => {
 
-        alert("saveFilter- not implemented" );return;
+        alertLog("saveFilter- not implemented" );return;
         event.preventDefault();
         const newFilter = event.target.elements.filterInput.value;
-        alert(newFilter);
+        alertLog(newFilter);
         setFilters([...filters, {name: newFilter, select: "", criteria: ""}]);
         event.target.reset();
     };
