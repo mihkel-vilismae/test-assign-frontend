@@ -1,4 +1,5 @@
 // App.js
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useState} from 'react';
 import './App.css';
 import ExistingFilters from "./ExistingFilters";
@@ -31,29 +32,26 @@ function App() {
     };
 
     return (
-            <div className="app-container">
-                <div className="centered-content">
-
-                    <div className="rect-area" style={{backgroundColor: '#ffe0e0'}}>
-                        <div className="center-content">
-                            <button onClick={openModal}>Open Modal</button>
-                        </div>
+        <div className="app-container container">
+            <div className="centered-content row justify-content-center">
+                <div className="rect-area alert alert-danger">
+                    <div className="center-content text-center">
+                        <button onClick={openModal} className="btn btn-primary">Open Modal</button>
                     </div>
-
-                    <div className="rect-area" style={{backgroundColor: '#e0ffe0'}}>
-                        <div className="center-content">
-                            <ExistingFilters onDataChange={receiveDataFromChild}/>
-                        </div>
+                </div>
+                <div className="rect-area alert alert-success">
+                    <div className="center-content text-center">
+                        <ExistingFilters onDataChange={receiveDataFromChild} />
                     </div>
-
-                    <div className="rect-area" id="add-filter" style={{backgroundColor: '#e0f5ff'}}>
-                        <div className="center-content">
-                            <FilterForm filterData={editFilterFromChild}/>
-                        </div>
+                </div>
+                <div className="rect-area alert alert-info" id="add-filter">
+                    <div className="center-content text-center">
+                        <FilterForm filterData={editFilterFromChild} />
                     </div>
-
                 </div>
             </div>
+        </div>
+
     );
 }
 

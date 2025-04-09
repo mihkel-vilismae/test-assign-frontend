@@ -47,8 +47,8 @@ function ExistingFilters({onDataChange: openFilterToEdit}) {
     }
 
     return (
-        <table id="existing-filters">
-            <thead>
+        <table id="existing-filters" className="table table-striped">
+            <thead className="thead-dark">
             <tr>
                 <th>Name</th>
                 <th>Usage</th>
@@ -57,17 +57,21 @@ function ExistingFilters({onDataChange: openFilterToEdit}) {
             </tr>
             </thead>
             <tbody>
-            {filters.map((filter, index) => (
+                {filters.map((filter, index) => (
                 <tr key={index}>
                     <td>{filter.name}</td>
                     <td>{filter.selection}</td>
-                    <td>{filter.criteria.map((criterion) => (
-                        <li key={criterion.id}>
-                            {criterion.type} {criterion.comparator} {criterion.value}
-                        </li>
-                    ))}</td>
                     <td>
-                        <button onClick={() => handleEdit(filter)}>Edit</button>
+                        <ul className="list-unstyled">
+                            {filter.criteria.map((criterion) => (
+                                <li key={criterion.id}>
+                                    {criterion.type} {criterion.comparator} {criterion.value}
+                                </li>
+                            ))}
+                        </ul>
+                    </td>
+                    <td>
+                        <button onClick={() => handleEdit(filter)} className="btn btn-secondary">Edit</button>
                     </td>
                 </tr>
             ))}

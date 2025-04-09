@@ -134,55 +134,53 @@ function FilterForm({ filterData }) {
 
     return (
         <div className="new-filter-form" id={"new-filter-form"} ref={newFilterFormRef}>
-            <div className="filter-modal">
-                <div className="modal-header">
+            <div className="filter-modal modal-dialog">
+                <div className="modal-header bg-primary text-white">
                     <span>Filter</span>
                     <span>{filterData ? <pre>{JSON.stringify(filterData, null, 2)}</pre> : 'no filter selected'}</span>
-                    <span onClick={closeForm}>✖</span>
+                    <span onClick={closeForm} className="close">✖</span>
                 </div>
 
                 <div className="modal-content">
-                    <div className="form-row">
+                    <div className="form-row form-group">
                         <label>Filter name</label>
-                        <input id="filterName" className="input-field" type="text" value={filterName}
+                        <input id="filterName" className="input-field form-control" type="text" value={filterName}
                                onChange={(e) => setFilterName(e.target.value)}/>
                     </div>
 
-                    <div className="form-row">
+                    <div className="form-row form-group">
                         <label>Criteria</label>
                         <span className="criteria-container">
 
-                        </span>
+                </span>
                     </div>
 
-                    <div className="form-row">
-                        <button className={"mx-auto btn btn-light"} onClick={addFilterCriteriaRow}>+ Add Row</button>
+                    <div className="form-row form-group text-center">
+                        <button className="mx-auto btn btn-light" onClick={addFilterCriteriaRow}>+ Add Row</button>
                     </div>
 
-                    <div className="form-row">
+                    <div className="form-row form-group">
                         <label className="form-label">Usage</label>
                         <div className="radio-group">
-                            <label className="radio-label">
+                            <label className="radio-label form-check">
                                 <input type="radio" name="selection" value="common" checked={selection === 'common'}
-                                       onChange={() => setSelection('common')}/>Common
+                                       onChange={() => setSelection('common')} className="form-check-input"/>Common
                             </label>
-                            <label className="radio-label">
+                            <label className="radio-label form-check">
                                 <input type="radio" name="selection" value="rare" checked={selection === 'rare'}
-                                       onChange={() => setSelection('rare')}/>Rare
+                                       onChange={() => setSelection('rare')} className="form-check-input"/>Rare
                             </label>
-                            <label className="radio-label">
+                            <label className="radio-label form-check">
                                 <input type="radio" name="selection" value="special" checked={selection === 'special'}
-                                       onChange={() => setSelection('special')}/>Special
+                                       onChange={() => setSelection('special')} className="form-check-input"/>Special
                             </label>
                         </div>
                     </div>
-
-
                 </div>
 
                 <div className="modal-footer">
-                    <button onClick={closeForm} className="btn btn-close">CLOSE</button>
-                    <button onClick={saveForm} className="btn btn-save">SAVE</button>
+                    <button onClick={closeForm} className="btn btn-secondary">CLOSE</button>
+                    <button onClick={saveForm} className="btn btn-primary">SAVE</button>
                 </div>
             </div>
         </div>
