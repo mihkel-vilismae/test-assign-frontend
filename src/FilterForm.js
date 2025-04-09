@@ -9,14 +9,35 @@ import Criterion, { getDefaultCriterion } from './Entities/Criterion';
 
 let count = 0;
 
-function FilterForm({ filterData }) {
-    const [filterName, setFilterName] = useState('');
+const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
+const [filterName, setFilterName] = useState('');
     const [selection, setSelection] = useState('');
     const newFilterFormRef = useRef(null);
     const [form, setForm] = useState(null);
     const [criteriaContainer, setCriteriaContainer] = useState(null);
     const criteriaContainerRoot = useRef(null);
     const [criteria, setCriteria] = useState([]);
+    const [internalFilterData, setInternalFilterData] = useState({});
+
+    React.useEffect(() => {
+        setInternalFilterData(filterData);
+    }, [filterData]);
+
+
+
+    const getFilterData = () => {
+        return internalFilterData;
+    };
+
+    const handleChange = (e) => {
+        const updatedData = { ...internalFilterData, [e.target.name]: e.target.value };
+        setInternalFilterData(updatedData);
+        onChange(updatedData); // Update parent state
+    };
+
+    React.useImperativeHandle(ref, () => ({
+        getFilterData,
+    }));
 
     // initializes variables
     useEffect(() => {
@@ -37,7 +58,6 @@ function FilterForm({ filterData }) {
 
         showForm();
         populateForm(filterData);
-        markFinished();
     }, [filterData]);
 
     function populateForm(filterData) {
@@ -55,8 +75,7 @@ function FilterForm({ filterData }) {
                     key={criterion.id}
                     index={criterion.id}
                     onRemove={handleRemoveCriteria}
-                    onChange={()=>  alert('onChange jee')}
-
+                    onChange={()=>  {}}
                 />
             ));
             criteriaContainerRoot.current.render(criteriaRows);
@@ -83,10 +102,11 @@ function FilterForm({ filterData }) {
 
     // closeForm is called when the close button is clicked
     function closeForm() {
+        alert('closeForm: '+ Database.getInputValuesAsString());
         emptyForm();
-        if (form) {
+       /* if (form) {
             form.setAttribute('style', 'display: none;');
-        }else alertLog('form is not found', 2);
+        }else alertLog('form is not found', 2);*/
     }
 
     // emptyForm is called when the form is about to be shown or closed
@@ -108,28 +128,8 @@ function FilterForm({ filterData }) {
         alertLog('saveForm', 2);
     }
 
-    function markFinished() {
-        return;
-        if (form) {
-            const filterNameInput = form.querySelector('#filterName');
-            if (filterNameInput && filterNameInput.value) {
-                filterNameInput.classList.add('green-background');
-            } else {
-                filterNameInput.classList.add('red-background');
-            }
-            const criteriaRows = form.querySelectorAll('.criteria-row');
-            criteriaRows.forEach(row => {
-                const inputs = row.querySelectorAll('input, select');
-                inputs.forEach(input => {
-                    if (input.value) {
-                        input.classList.add('green-background');
-                    } else {
-                        input.classList.add('red-background');
-                    }
-                });
-            });
-        }
-    }
+
+
 
 
     return (
@@ -137,7 +137,7 @@ function FilterForm({ filterData }) {
             <div className="filter-modal modal-dialog">
                 <div className="modal-header bg-primary text-white">
                     <span>Filter</span>
-                    <span>{filterData ? <pre>{JSON.stringify(filterData, null, 2)}</pre> : 'no filter selected'}</span>
+                    <span>{0 && filterData ? <pre>{JSON.stringify(filterData, null, 2)}</pre> : 'no filter selected'}</span>
                     <span onClick={closeForm} className="close">✖</span>
                 </div>
 
@@ -185,6 +185,6 @@ function FilterForm({ filterData }) {
             </div>
         </div>
     );
-}
+});
 
 export default FilterForm;

@@ -4,24 +4,8 @@ import React, {useRef, useState} from 'react';
 import './App.css';
 import ExistingFilters from "./ExistingFilters";
 import FilterForm from "./FilterForm";
-import {BrowserRouter} from 'react-router-dom'; // Or other Router type
-import {alertLog} from "./Database";
-import Button from "bootstrap/js/src/button";
-
-function Modal({ isOpen, onClose }) {
-    if (!isOpen) {
-        return null; // Don't render anything if the modal is closed
-    }
-
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <div>This is modal</div>
-                <button onClick={onClose}>Close</button> {/* Close button */}
-            </div>
-        </div>
-    );
-}
+import {Modal} from "./components/Modal";
+import * as Database from "./Database";
 
 function App() {
     const [editFilterFromChild, setEditFilterFromChild] = useState(null);
@@ -31,6 +15,31 @@ function App() {
     const [filterData, setFilterData] = useState({}); // State to hold filter data
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
 
+
+
+    const openModal = () => {
+        setShowModal(true);
+        alert(Database.getInputValuesAsString());
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    const handleSave = () => {
+        alert("handleSave - not implemented");
+        // Access the updated filter data from the modal's FilterForm
+        const updatedFilterData = modalContentRef.current.getFilterData();
+        setFilterData(updatedFilterData); // Update the main filter data
+        closeModal();
+    };
+
+
+
+    const receiveDataFromChild = (data) => {
+        setEditFilterFromChild(data);
+    };
+
     /*const openModal = () => {
         setShowModal(true);
     };
@@ -39,43 +48,37 @@ function App() {
         setShowModal(false);
     };*/
 
-    const handleSubmit = (event) => {
-        alert("handleSubmit - not implemented");
-        event.preventDefault();
-
-        const form = showModal ? document.getElementById('modalForm') : formRef.current;
-        const formData = new FormData(form);
-
-        // ... process formData ...
-
-        closeModal();
-    };
+    /* const handleSave = () => {
+         alert("handleSave - not implemented");
+         // Access the updated filter data from the modal's FilterForm
+         const updatedFilterData = modalContentRef.current.getFilterData();
+         setFilterData(updatedFilterData); // Update the main filter data
+         closeModal();
+     };
 
 
-    const openModal = () => {
-        alert("Open modal - setShowModal->sj" );
-        setShowModal(true);
-    };
+     const saveFilter = (event) => {
 
-    const closeModal = () => {
-        alert("closeModal modal - . setShowModal->jh" );
-        setShowModal(false);
-    };
+         alert("saveFilter- not implemented" );
+         return;
+         event.preventDefault();
+         const newFilter = event.target.elements.filterInput.value;
+         alertLog(newFilter);
+         setFilters([...filters, {name: newFilter, select: "", criteria: ""}]);
+         event.target.reset();
+     };
 
+     const handleSubmit = (event) => {
+         alert("handleSubmit - not implemented");
+         event.preventDefault();
 
-    const saveFilter = (event) => {
+         const form = showModal ? document.getElementById('modalForm') : formRef.current;
+         const formData = new FormData(form);
 
-        alertLog("saveFilter- not implemented" );return;
-        event.preventDefault();
-        const newFilter = event.target.elements.filterInput.value;
-        alertLog(newFilter);
-        setFilters([...filters, {name: newFilter, select: "", criteria: ""}]);
-        event.target.reset();
-    };
+         // ... process formData ...
 
-    const receiveDataFromChild = (data) => {
-        setEditFilterFromChild(data);
-    };
+         closeModal();
+     };*/
 
     return (
         <div className="app-container container">
@@ -92,7 +95,7 @@ function App() {
                 </div>
                 <div className="rect-area alert alert-info" id="add-filter">
                     <div className="center-content text-center">
-                        <FilterForm filterData={editFilterFromChild}/>
+                        <FilterForm filterData={editFilterFromChild}  onChange={setFilterData}/>
                     </div>
                 </div>
                 <div className="rect-area alert alert-info" id="open-modal">
@@ -100,7 +103,8 @@ function App() {
                         <button onClick={openModal}>Open Modal</button>
                     </div>
                 </div>
-                <Modal isOpen={showModal} onClose={closeModal}> {/* Render the Modal */}
+
+                <Modal isOpen={showModal} onClose={closeModal} onSave={handleSave}> {/* Render the Modal */}
                     <FilterForm
                         ref={modalContentRef}
                         filterData={filterData}

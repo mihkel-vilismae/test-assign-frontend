@@ -29,3 +29,29 @@ export const alertLog = (text, level = 0) => {
     } else
         console.log(text);
 }
+
+export const  getInputValuesAsString = () => {
+    const container = document.getElementById('new-filter-form');
+    if (!container) return '';
+
+    const inputs = container.querySelectorAll('input');
+    const values = Array.from(inputs).map(input => input.value);
+    let resultString = values.join(',');
+    console.log("getInputValuesAsString: ", resultString);
+    return resultString; // Join values with a comma or any other delimiter
+}
+
+export const  fillFormWithValues = () => {
+    /*const container = document.getElementById('mess');
+    if (!container) return;
+
+    const inputs = container.querySelectorAll('input');
+    const values = valuesString.split(','); // Split the string using the same delimiter
+
+    values.forEach((value, index) => {
+        if (inputs[index]) {
+            inputs[index].value = value;
+        }
+    });*/
+ //   console.log('Filled form with values:', values);
+}
