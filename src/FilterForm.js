@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './FilterForm.css';
-import * as Database from "./Database";
-import { alertLog } from "./Database";
-import { useParams } from 'react-router-dom';
-import CriteriaRow from "./CriteriaRow";
 import ReactDOM from "react-dom/client";
 import Criterion, { getDefaultCriterion } from './Entities/Criterion';
-
-let count = 0;
+import CriteriaRow from "./CriteriaRow";
 
 const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
-const [filterName, setFilterName] = useState('');
+    const [filterName, setFilterName] = useState('');
     const [selection, setSelection] = useState('');
     const newFilterFormRef = useRef(null);
     const [form, setForm] = useState(null);
@@ -23,32 +18,20 @@ const [filterName, setFilterName] = useState('');
         setInternalFilterData(filterData);
     }, [filterData]);
 
-
-
     const getFilterData = () => {
         return internalFilterData;
     };
 
-  /*  const handleChange = (e) => {
-        const updatedData = { ...internalFilterData, [e.target.name]: e.target.value };
-        setInternalFilterData(updatedData);
-        onChange(updatedData); // Update parent state
-    };*/
-
     const handleFormInternalChange = (name, value) => {
         const updatedData = { ...internalFilterData, [name]: value };
-        console.log('handleFormInternalChange', name, value);
-        console.log('internalFilterData', internalFilterData);
-        console.log('updatedData', updatedData);
         setInternalFilterData(updatedData);
-        onChange(updatedData); // Update parent state
+        onChange(updatedData);
     };
 
     React.useImperativeHandle(ref, () => ({
         getFilterData,
     }));
 
-    // initializes variables
     useEffect(() => {
         const currentForm = newFilterFormRef.current;
         const currentCriteriaContainer = currentForm.querySelector('.criteria-container');
@@ -59,12 +42,7 @@ const [filterName, setFilterName] = useState('');
         criteriaContainerRoot.current = currentCriteriaContainerRoot;
     }, []);
 
-
-    // filterData is changed, initializes the form with the filterData
     useEffect(() => {
-        //alertlog("FilterForm useEffect- filterData is set");
-        //alertlog(JSON.stringify(filterData));
-
         showForm();
         populateForm(filterData);
     }, [filterData]);
@@ -75,70 +53,45 @@ const [filterName, setFilterName] = useState('');
         setCriteria(filterData?.criteria || []);
     }
 
-    useEffect(() => { // Re-render whenever criteria changes
+    useEffect(() => {
         if (criteriaContainerRoot.current) {
-            //alertlog(JSON.stringify(criteria))
             const criteriaRows = criteria.map((criterion) => (
                 <CriteriaRow
                     filterCriteria={criterion}
                     key={criterion.id}
                     index={criterion.id}
                     onRemove={handleRemoveCriteria}
-                    onChange={()=>  {}}
+                    onChange={() => {}}
                 />
             ));
             criteriaContainerRoot.current.render(criteriaRows);
         }
     }, [criteria]);
 
-    // handleRemoveCriteria is called when the remove button is clicked, remove the criterion row
     const handleRemoveCriteria = (index) => {
-        //alertlog(`handleRemoveCriteria - Removing criterion at index ${index}`, 3);
         setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== index));
-        //alertlog('handleRemoveCriteria done, should call render...', 3);
     };
 
-    // showForm is called when the filterData is set
     function showForm() {
         emptyForm();
-        //alertlog('showForm', 2);
-        //alertlog('form is ' + form, 1);
         if (form) {
-            //alertlog('form is found, now showing', 2);
             form.setAttribute('style', 'display: block;');
         }
     }
 
-    // closeForm is called when the close button is clicked
     function closeForm() {
         emptyForm();
-       /* if (form) {
-            form.setAttribute('style', 'display: none;');
-        }else //alertlog('form is not found', 2);*/
     }
 
-    // emptyForm is called when the form is about to be shown or closed
     function emptyForm() {
-        //alertlog('emptyForm', 2);
         setFilterName('');
         setCriteria([]);
-        //alertlog('form after empty: ' + newFilterFormRef.current, 2);
     }
 
-    // addFilterCriteriaRow is called when the "+ Add Row" button is clicked, add new criterion row
     function addFilterCriteriaRow() {
-        //alertlog('addFilterCriteriaRow', 3);
         const newCriterion = getDefaultCriterion();
         setCriteria([...criteria, newCriterion]);
     }
-
-    function saveForm() {
-        //alertlog('saveForm', 2);
-    }
-
-
-
-
 
     return (
         <div className="new-filter-form" id={"new-filter-form"} ref={newFilterFormRef}>
@@ -158,9 +111,7 @@ const [filterName, setFilterName] = useState('');
 
                     <div className="form-row form-group">
                         <label>Criteria</label>
-                        <span className="criteria-container">
-
-                </span>
+                        <span className="criteria-container"></span>
                     </div>
 
                     <div className="form-row form-group text-center">
@@ -188,7 +139,6 @@ const [filterName, setFilterName] = useState('');
 
                 <div className="modal-footer">
                     <button onClick={closeForm} className="btn btn-secondary">CLOSE</button>
-                    <button onClick={saveForm} className="btn btn-primary">SAVE</button>
                 </div>
             </div>
         </div>

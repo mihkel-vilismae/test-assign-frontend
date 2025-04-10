@@ -11,26 +11,21 @@ function App() {
     const [editFilterFromChild, setEditFilterFromChild] = useState(null);
     const [filters, setFilters] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const formRef = useRef(null);
     const [filterData, setFilterData] = useState({}); // State to hold filter data
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
     const [internalFilterData, setInternalFilterData] = useState({});
 
     const openModal = () => {
         setShowModal(true);
-        console.log('internalFilterData', internalFilterData);
     };
 
     const closeModal = () => {
         setShowModal(false);
     };
-    useEffect(() => {
-    }, [internalFilterData]);
 
     const handleSave = () => {
-        // Access the updated filter data from the modal's FilterForm
         const updatedFilterData = modalContentRef.current.getFilterData();
-        setFilterData(updatedFilterData); // Update the main filter data
+        setFilterData(updatedFilterData);
         closeModal();
     };
 
@@ -53,16 +48,10 @@ function App() {
                 </div>
                 <div className="rect-area alert alert-info" id="add-filter">
                     <div className="center-content text-center">
-                        <FilterForm filterData={editFilterFromChild}  onChange={setInternalFilterData}/>
+                        <FilterForm filterData={editFilterFromChild} onChange={setInternalFilterData}/>
                     </div>
                 </div>
-                <div className="rect-area alert alert-info" id="open-modal">
-                    <div className="center-content text-center">
-                        <button onClick={openModal}>Open Modal</button>
-                    </div>
-                </div>
-
-                <Modal isOpen={showModal} onClose={closeModal} onSave={handleSave}> {/* Render the Modal */}
+                <Modal isOpen={showModal} onClose={closeModal} onSave={handleSave}>
                     <FilterForm
                         ref={modalContentRef}
                         filterData={internalFilterData}
@@ -70,9 +59,7 @@ function App() {
                     />
                 </Modal>
             </div>
-
         </div>
-
     );
 }
 

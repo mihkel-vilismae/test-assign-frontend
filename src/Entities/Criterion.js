@@ -24,4 +24,4 @@ export function getTypeComparator(type) {
     }
 }
 
-export default  Criterion;
+export default Criterion;

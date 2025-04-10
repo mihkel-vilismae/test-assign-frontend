@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Criterion, { getDefaultCriterion } from './Entities/Criterion';
+import { getDefaultCriterion } from './Entities/Criterion';
 
 function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
     //alertlog('CriteriaRow: ->'+JSON.stringify(filterCriteria));
