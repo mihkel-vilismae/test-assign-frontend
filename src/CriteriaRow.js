@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Criterion, { getDefaultCriterion } from './Entities/Criterion';
-import {alertLog} from "./Database";
 
 function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
-    alertLog('CriteriaRow: ->'+JSON.stringify(filterCriteria));
+    //alertlog('CriteriaRow: ->'+JSON.stringify(filterCriteria));
     const [criterion, setCriterion] = useState(() => filterCriteria || getDefaultCriterion());
 
     useEffect(() => {

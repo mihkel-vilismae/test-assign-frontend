@@ -62,8 +62,8 @@ const [filterName, setFilterName] = useState('');
 
     // filterData is changed, initializes the form with the filterData
     useEffect(() => {
-        alertLog("FilterForm useEffect- filterData is set");
-        alertLog(JSON.stringify(filterData));
+        //alertlog("FilterForm useEffect- filterData is set");
+        //alertlog(JSON.stringify(filterData));
 
         showForm();
         populateForm(filterData);
@@ -77,7 +77,7 @@ const [filterName, setFilterName] = useState('');
 
     useEffect(() => { // Re-render whenever criteria changes
         if (criteriaContainerRoot.current) {
-            alertLog(JSON.stringify(criteria))
+            //alertlog(JSON.stringify(criteria))
             const criteriaRows = criteria.map((criterion) => (
                 <CriteriaRow
                     filterCriteria={criterion}
@@ -93,48 +93,47 @@ const [filterName, setFilterName] = useState('');
 
     // handleRemoveCriteria is called when the remove button is clicked, remove the criterion row
     const handleRemoveCriteria = (index) => {
-        alertLog(`handleRemoveCriteria - Removing criterion at index ${index}`, 3);
+        //alertlog(`handleRemoveCriteria - Removing criterion at index ${index}`, 3);
         setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== index));
-        alertLog('handleRemoveCriteria done, should call render...', 3);
+        //alertlog('handleRemoveCriteria done, should call render...', 3);
     };
 
     // showForm is called when the filterData is set
     function showForm() {
         emptyForm();
-        alertLog('showForm', 2);
-        alertLog('form is ' + form, 1);
+        //alertlog('showForm', 2);
+        //alertlog('form is ' + form, 1);
         if (form) {
-            alertLog('form is found, now showing', 2);
+            //alertlog('form is found, now showing', 2);
             form.setAttribute('style', 'display: block;');
-        } else alertLog('form is not found', 2);
+        }
     }
 
     // closeForm is called when the close button is clicked
     function closeForm() {
-        alert('closeForm: '+ Database.getInputValuesAsString());
         emptyForm();
        /* if (form) {
             form.setAttribute('style', 'display: none;');
-        }else alertLog('form is not found', 2);*/
+        }else //alertlog('form is not found', 2);*/
     }
 
     // emptyForm is called when the form is about to be shown or closed
     function emptyForm() {
-        alertLog('emptyForm', 2);
+        //alertlog('emptyForm', 2);
         setFilterName('');
         setCriteria([]);
-        alertLog('form after empty: ' + newFilterFormRef.current, 2);
+        //alertlog('form after empty: ' + newFilterFormRef.current, 2);
     }
 
     // addFilterCriteriaRow is called when the "+ Add Row" button is clicked, add new criterion row
     function addFilterCriteriaRow() {
-        alertLog('addFilterCriteriaRow', 3);
+        //alertlog('addFilterCriteriaRow', 3);
         const newCriterion = getDefaultCriterion();
         setCriteria([...criteria, newCriterion]);
     }
 
     function saveForm() {
-        alertLog('saveForm', 2);
+        //alertlog('saveForm', 2);
     }
 
 

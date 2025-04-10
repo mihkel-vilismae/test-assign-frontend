@@ -1,7 +1,6 @@
 // ExistingFilters.js
 import React, { useEffect, useState } from 'react';
 import * as Database from './Database';
-import {alertLog} from "./Database"; // Import your Database constants
 
 
 function ExistingFilters({onDataChange: openFilterToEdit}) {
@@ -11,7 +10,7 @@ function ExistingFilters({onDataChange: openFilterToEdit}) {
 
     // Function to handle the "edit filter" button click
     const handleEdit = (filter) => {
-        alertLog('handleEdit Edit filter with ID: ' + filter.id);
+        //alertlog('handleEdit Edit filter with ID: ' + filter.id);
         openFilterToEdit(filter); // Call the callback function and pass the data
     };
 

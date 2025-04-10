@@ -16,8 +16,6 @@ function App() {
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
     const [internalFilterData, setInternalFilterData] = useState({});
 
-
-
     const openModal = () => {
         setShowModal(true);
         console.log('internalFilterData', internalFilterData);
@@ -27,62 +25,18 @@ function App() {
         setShowModal(false);
     };
     useEffect(() => {
-        alert('internalFilterData' + JSON.stringify(internalFilterData));
     }, [internalFilterData]);
 
     const handleSave = () => {
-        alert("handleSave - not implemented");
         // Access the updated filter data from the modal's FilterForm
         const updatedFilterData = modalContentRef.current.getFilterData();
         setFilterData(updatedFilterData); // Update the main filter data
         closeModal();
     };
 
-
-
     const receiveDataFromChild = (data) => {
         setEditFilterFromChild(data);
     };
-
-    /*const openModal = () => {
-        setShowModal(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-    };*/
-
-    /* const handleSave = () => {
-         alert("handleSave - not implemented");
-         // Access the updated filter data from the modal's FilterForm
-         const updatedFilterData = modalContentRef.current.getFilterData();
-         setFilterData(updatedFilterData); // Update the main filter data
-         closeModal();
-     };
-
-
-     const saveFilter = (event) => {
-
-         alert("saveFilter- not implemented" );
-         return;
-         event.preventDefault();
-         const newFilter = event.target.elements.filterInput.value;
-         alertLog(newFilter);
-         setFilters([...filters, {name: newFilter, select: "", criteria: ""}]);
-         event.target.reset();
-     };
-
-     const handleSubmit = (event) => {
-         alert("handleSubmit - not implemented");
-         event.preventDefault();
-
-         const form = showModal ? document.getElementById('modalForm') : formRef.current;
-         const formData = new FormData(form);
-
-         // ... process formData ...
-
-         closeModal();
-     };*/
 
     return (
         <div className="app-container container">
