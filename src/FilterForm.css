@@ -171,3 +171,10 @@ ul {
     padding-left: 20px;
     margin: 0;
 }
+
+#new-filter-form {
+    width: 800px;
+    height: 500px;
+    overflow: auto;
+    resize: vertical;
+}
