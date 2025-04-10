@@ -29,8 +29,17 @@ const [filterName, setFilterName] = useState('');
         return internalFilterData;
     };
 
-    const handleChange = (e) => {
+  /*  const handleChange = (e) => {
         const updatedData = { ...internalFilterData, [e.target.name]: e.target.value };
+        setInternalFilterData(updatedData);
+        onChange(updatedData); // Update parent state
+    };*/
+
+    const handleFormInternalChange = (name, value) => {
+        const updatedData = { ...internalFilterData, [name]: value };
+        console.log('handleFormInternalChange', name, value);
+        console.log('internalFilterData', internalFilterData);
+        console.log('updatedData', updatedData);
         setInternalFilterData(updatedData);
         onChange(updatedData); // Update parent state
     };
@@ -144,8 +153,8 @@ const [filterName, setFilterName] = useState('');
                 <div className="modal-content">
                     <div className="form-row form-group">
                         <label>Filter name</label>
-                        <input id="filterName" className="input-field form-control" type="text" value={filterName}
-                               onChange={(e) => setFilterName(e.target.value)}/>
+                        <input id="filterName" className="input-field form-control" type="text" value={internalFilterData?.name}
+                               onChange={(e) => handleFormInternalChange('name', e.target.value)}/>
                     </div>
 
                     <div className="form-row form-group">
@@ -163,16 +172,16 @@ const [filterName, setFilterName] = useState('');
                         <label className="form-label">Usage</label>
                         <div className="radio-group">
                             <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="common" checked={selection === 'common'}
-                                       onChange={() => setSelection('common')} className="form-check-input"/>Common
+                                <input type="radio" name="selection" value="common" checked={internalFilterData?.selection === 'common'}
+                                       onChange={() => handleFormInternalChange('selection', 'common')} className="form-check-input"/>Common
                             </label>
                             <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="rare" checked={selection === 'rare'}
-                                       onChange={() => setSelection('rare')} className="form-check-input"/>Rare
+                                <input type="radio" name="selection" value="rare" checked={internalFilterData?.selection === 'rare'}
+                                       onChange={() => handleFormInternalChange('selection', 'rare')} className="form-check-input"/>Rare
                             </label>
                             <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="special" checked={selection === 'special'}
-                                       onChange={() => setSelection('special')} className="form-check-input"/>Special
+                                <input type="radio" name="selection" value="special" checked={internalFilterData?.selection === 'special'}
+                                       onChange={() => handleFormInternalChange('selection', 'special')} className="form-check-input"/>Special
                             </label>
                         </div>
                     </div>

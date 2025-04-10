@@ -1,6 +1,6 @@
 // App.js
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
 import ExistingFilters from "./ExistingFilters";
 import FilterForm from "./FilterForm";
@@ -14,17 +14,21 @@ function App() {
     const formRef = useRef(null);
     const [filterData, setFilterData] = useState({}); // State to hold filter data
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
+    const [internalFilterData, setInternalFilterData] = useState({});
 
 
 
     const openModal = () => {
         setShowModal(true);
-        alert(Database.getInputValuesAsString());
+        console.log('internalFilterData', internalFilterData);
     };
 
     const closeModal = () => {
         setShowModal(false);
     };
+    useEffect(() => {
+        alert('internalFilterData' + JSON.stringify(internalFilterData));
+    }, [internalFilterData]);
 
     const handleSave = () => {
         alert("handleSave - not implemented");
@@ -95,7 +99,7 @@ function App() {
                 </div>
                 <div className="rect-area alert alert-info" id="add-filter">
                     <div className="center-content text-center">
-                        <FilterForm filterData={editFilterFromChild}  onChange={setFilterData}/>
+                        <FilterForm filterData={editFilterFromChild}  onChange={setInternalFilterData}/>
                     </div>
                 </div>
                 <div className="rect-area alert alert-info" id="open-modal">
@@ -107,8 +111,8 @@ function App() {
                 <Modal isOpen={showModal} onClose={closeModal} onSave={handleSave}> {/* Render the Modal */}
                     <FilterForm
                         ref={modalContentRef}
-                        filterData={filterData}
-                        onChange={setFilterData}
+                        filterData={internalFilterData}
+                        onChange={setInternalFilterData}
                     />
                 </Modal>
             </div>
