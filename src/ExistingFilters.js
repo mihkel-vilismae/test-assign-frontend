@@ -2,17 +2,22 @@
 import React, { useEffect, useState } from 'react';
 import * as Database from './Database';
 
-
-function ExistingFilters({onDataChange: openFilterToEdit}) {
+function ExistingFilters({onChooseFilter: openFilterToEdit}) {
     const [filters, setFilters] = useState([]);
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null);     // Add error state
 
     // Function to handle the "edit filter" button click
     const handleEdit = (filter) => {
+
+        //alert('handleEdit Edit filter with ID: ' + JSON.stringify(filter));
         //alertlog('handleEdit Edit filter with ID: ' + filter.id);
         openFilterToEdit(filter); // Call the callback function and pass the data
     };
+
+    const handleDelete = async (filter) => {
+
+    }
 
     // Fetch existing filters from the API when the component mounts
     useEffect(() => {

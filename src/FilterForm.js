@@ -9,28 +9,39 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
     const [selection, setSelection] = useState('');
     const newFilterFormRef = useRef(null);
     const [form, setForm] = useState(null);
+
     const [criteriaContainer, setCriteriaContainer] = useState(null);
     const criteriaContainerRoot = useRef(null);
     const [criteria, setCriteria] = useState([]);
+
     const [internalFilterData, setInternalFilterData] = useState({});
 
     React.useEffect(() => {
+    const [dataSet, setData] = useState(false);
+    const [containerSet, setContainer] = useState(false);
+/*  React.useEffect(() => {
         setInternalFilterData(filterData);
     }, [filterData]);
+
+     React.useImperativeHandle(ref, () => ({
+        getFilterData,
+    }));
+ */
+
 
     const getFilterData = () => {
         return internalFilterData;
     };
 
-    const handleFormInternalChange = (name, value) => {
-        const updatedData = { ...internalFilterData, [name]: value };
-        setInternalFilterData(updatedData);
-        onChange(updatedData);
-    };
+    const setFilterCriteria = (criteria) => {
+        setCriteria(criteria);
+    }
 
-    React.useImperativeHandle(ref, () => ({
-        getFilterData,
-    }));
+    const setFilterData = (data) => {
+        setInternalFilterData([])
+        setInternalFilterData(data);
+        setCriteria(data.criteria);
+    }
 
     useEffect(() => {
         const currentForm = newFilterFormRef.current;
@@ -40,33 +51,48 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
         setForm(currentForm);
         setCriteriaContainer(currentCriteriaContainer);
         criteriaContainerRoot.current = currentCriteriaContainerRoot;
+       // setFilterCriteria(internalFilterData.criteria)
+        setContainer(true);
     }, []);
 
     useEffect(() => {
-        showForm();
-        populateForm(filterData);
-    }, [filterData]);
-
-    function populateForm(filterData) {
-        setFilterName(filterData?.name || '');
-        setSelection(filterData?.selection || '');
-        setCriteria(filterData?.criteria || []);
-    }
-
-    useEffect(() => {
         if (criteriaContainerRoot.current) {
+            alert('FilterForm -> criteria:', criteria);
             const criteriaRows = criteria.map((criterion) => (
                 <CriteriaRow
                     filterCriteria={criterion}
                     key={criterion.id}
                     index={criterion.id}
                     onRemove={handleRemoveCriteria}
-                    onChange={() => {}}
+                    onChange={() => {  alert('FilterForm -> onChange:'); }}
                 />
             ));
             criteriaContainerRoot.current.render(criteriaRows);
         }
     }, [criteria]);
+    }, [containerSet, criteria]);
+
+
+
+    const handleFormInternalChange = (name, value) => {
+        const updatedData = { ...internalFilterData, [name]: value };
+        setInternalFilterData(updatedData);
+        onChange(updatedData);
+    };
+
+    React.useImperativeHandle(ref, () => ({
+        getFilterData, setFilterData, setFilterCriteria
+    }));
+
+
+/*
+    useEffect(() => {
+        showForm();
+        populateForm(filterData);
+    }, [filterData]);*/
+
+
+
 
     const handleRemoveCriteria = (index) => {
         setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== index));

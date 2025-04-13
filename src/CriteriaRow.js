@@ -27,12 +27,9 @@ function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
         onChange(index, { ...criterion, value: newValue });
     };
 
-    const getTypeComparators = () => {
-        switch (criterion.type) {
-            case 'amount':
-            default:
-                return (
-                    <span className="">
+    function amountSelectionCode() {
+        return (
+            <span className="">
                     <select
                         className="criteria-select input-field"
                         value={criterion.comparator}
@@ -49,10 +46,12 @@ function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
                         onChange={handleValueChange}
                     />
                 </span>
-                );
-            case 'title':
-                return (
-                    <span className="">
+        );
+    }
+
+    function titleSelectionCode() {
+        return (
+            <span className="">
                     <select
                         className="criteria-select input-field"
                         value={criterion.comparator}
@@ -69,10 +68,12 @@ function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
                         onChange={handleValueChange}
                     />
                 </span>
-                );
-            case 'date':
-                return (
-                    <span className="">
+        );
+    }
+
+    function dateSelectionCode() {
+        return (
+            <span className="">
                     <select
                         className="criteria-select input-field"
                         value={criterion.comparator}
@@ -89,9 +90,31 @@ function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
                         onChange={handleValueChange}
                     />
                 </span>
-                );
+        );
+    }
+
+    const getTypeComparators = () => {
+        switch (criterion.type) {
+            case 'amount':
+            default:
+                return amountSelectionCode();
+            case 'title':
+                return titleSelectionCode()
+            case 'date':
+                return dateSelectionCode();
         }
     };
+
+    /*
+    //generateCriterionFromRow is used to generate the criterion object from the current row state
+    const generateCriterionFromRow = () => {
+        return {
+            id: criterion.id,
+            type: criterion.type,
+            comparator: criterion.comparator,
+            value: criterion.value
+        };
+    };*/
 
     const handleRemove = () => {
         console.log(`Removing criterion at index ${index}:`, criterion);

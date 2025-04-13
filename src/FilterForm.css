@@ -21,6 +21,8 @@ label {
 
 .modal-content {
     padding: 20px;
+    width: auto;
+    background-color: rgba(132, 239, 124, 0.27);
 }
 
 .form-row {

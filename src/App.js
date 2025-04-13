@@ -13,6 +13,7 @@ function App() {
     const [showModal, setShowModal] = useState(false);
     const [filterData, setFilterData] = useState({}); // State to hold filter data
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
+    const formContentRef = useRef(null); // Ref to access the FilterForm in the modal
     const [internalFilterData, setInternalFilterData] = useState({});
 
     const openModal = () => {
@@ -29,6 +30,20 @@ function App() {
         closeModal();
     };
 
+    useEffect(() => {
+        //updateModalValues(internalFilterData);
+    }   , [internalFilterData]);
+
+    /*const updateModalValues = (internalFilterData) => {
+        if (!internalFilterData) return;
+        // Access the FilterForm's internal state using the ref
+//        const updatedFilterData = modalContentRef.current.getFilterData();
+        modalContentRef.current.filterData(internalFilterData);
+        formContentRef.current.filterData(internalFilterData);
+        console.log('Saved Filter Data:', internalFilterData);
+        setFilterData(internalFilterData); // Update the parent state
+    };
+*/
     const receiveDataFromChild = (data) => {
         setEditFilterFromChild(data);
     };
@@ -48,14 +63,18 @@ function App() {
                 </div>
                 <div className="rect-area alert alert-info" id="add-filter">
                     <div className="center-content text-center">
-                        <FilterForm filterData={editFilterFromChild} onChange={setInternalFilterData}/>
+                        <FilterForm
+                            filterData={editFilterFromChild}
+                            onChange={filterValuesChanged}
+                            ref={formContentRef}
+                        />
                     </div>
                 </div>
                 <Modal isOpen={showModal} onClose={closeModal} onSave={handleSave}>
                     <FilterForm
                         ref={modalContentRef}
-                        filterData={internalFilterData}
-                        onChange={setInternalFilterData}
+                        filterData={editFilterFromChild}
+                        onChange={filterValuesChanged}
                     />
                 </Modal>
             </div>
