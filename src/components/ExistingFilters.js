@@ -1,8 +1,9 @@
 // ExistingFilters.js
 import React, { useEffect, useState } from 'react';
-import * as Database from './Database';
+import * as Database from '../Database';
+import {criteria} from "../App";
 
-function ExistingFilters({onChooseFilter: openFilterToEdit}) {
+function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData}) {
     const [filters, setFilters] = useState([]);
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null);     // Add error state
@@ -12,7 +13,7 @@ function ExistingFilters({onChooseFilter: openFilterToEdit}) {
 
         //alert('handleEdit Edit filter with ID: ' + JSON.stringify(filter));
         //alertlog('handleEdit Edit filter with ID: ' + filter.id);
-        openFilterToEdit(filter); // Call the callback function and pass the data
+        setActiveFilterData(filter); // Call the callback function and pass the data
     };
 
     const handleDelete = async (filter) => {
@@ -31,11 +32,15 @@ function ExistingFilters({onChooseFilter: openFilterToEdit}) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
+                alert(JSON.stringify(data))
                 setFilters(data);
+               // setAllData(data);
+               // alert('ExistingFilters '+JSON.stringify(allData))
             } catch (error) {
                 setError(error);  // Set the error state
             } finally {
                 setLoading(false); // Set loading to false after fetching (regardless of success or failure)
+
             }
         };
 

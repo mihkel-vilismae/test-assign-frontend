@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { getDefaultCriterion } from './Entities/Criterion';
+import { getDefaultCriterion } from '../Entities/Criterion';
 
-function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
+function CriteriaRow({ filterCriteria, index, onChange, onRemove, id, allData,setAllData }) {
     //alertlog('CriteriaRow: ->'+JSON.stringify(filterCriteria));
     const [criterion, setCriterion] = useState(() => filterCriteria || getDefaultCriterion());
 
     useEffect(() => {
-        setCriterion(filterCriteria || getDefaultCriterion());
+        //setCriterion(filterCriteria || getDefaultCriterion());
+        setCriterion(filterCriteria );
     }, [filterCriteria]);
 
     const handleTypeChange = (event) => {
@@ -118,12 +119,12 @@ function CriteriaRow({ filterCriteria, index, onChange, onRemove }) {
 
     const handleRemove = () => {
         console.log(`Removing criterion at index ${index}:`, criterion);
-        onRemove(index);
+        onRemove(criterion.id);
     };
 
     return (
         <div className="criteria-row">
-            <select className="criteria-select input-field" value={criterion.type} onChange={handleTypeChange}>
+            <select className="criteria-select input-field" id={criterion.id} value={criterion.type} onChange={handleTypeChange}>
                 <option value="amount">Amount</option>
                 <option value="title">Title</option>
                 <option value="date">Date</option>

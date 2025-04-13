@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './FilterForm.css';
+import '../styles/FilterForm.css';
 import ReactDOM from "react-dom/client";
-import Criterion, { getDefaultCriterion } from './Entities/Criterion';
+import Criterion, { getDefaultCriterion } from '../Entities/Criterion';
 import CriteriaRow from "./CriteriaRow";
+import criterion from "../Entities/Criterion";
+import {c} from "react/compiler-runtime";
 
-const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
+const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, filterData, onChange, allData, setAllData }, ref) => {
     const [filterName, setFilterName] = useState('');
     const [selection, setSelection] = useState('');
     const newFilterFormRef = useRef(null);
@@ -16,7 +18,6 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
 
     const [internalFilterData, setInternalFilterData] = useState({});
 
-    React.useEffect(() => {
     const [dataSet, setData] = useState(false);
     const [containerSet, setContainer] = useState(false);
 /*  React.useEffect(() => {
@@ -44,7 +45,7 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
     }
 
     useEffect(() => {
-        const currentForm = newFilterFormRef.current;
+        /*const currentForm = newFilterFormRef.current;
         const currentCriteriaContainer = currentForm.querySelector('.criteria-container');
         const currentCriteriaContainerRoot = ReactDOM.createRoot(currentCriteriaContainer);
 
@@ -52,25 +53,8 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
         setCriteriaContainer(currentCriteriaContainer);
         criteriaContainerRoot.current = currentCriteriaContainerRoot;
        // setFilterCriteria(internalFilterData.criteria)
-        setContainer(true);
+        setContainer(true);*/
     }, []);
-
-    useEffect(() => {
-        if (criteriaContainerRoot.current) {
-            alert('FilterForm -> criteria:', criteria);
-            const criteriaRows = criteria.map((criterion) => (
-                <CriteriaRow
-                    filterCriteria={criterion}
-                    key={criterion.id}
-                    index={criterion.id}
-                    onRemove={handleRemoveCriteria}
-                    onChange={() => {  alert('FilterForm -> onChange:'); }}
-                />
-            ));
-            criteriaContainerRoot.current.render(criteriaRows);
-        }
-    }, [criteria]);
-    }, [containerSet, criteria]);
 
 
 
@@ -94,8 +78,14 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
 
 
 
-    const handleRemoveCriteria = (index) => {
-        setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== index));
+    const handleRemoveCriteria = (id) => {
+        alert(id)
+        alert(JSON.stringify(activeFilterData))
+        alert(JSON.stringify(activeFilterData.criteria))
+        setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== id));
+        setAllData(...allData, criteria);
+        alert(JSON.stringify(activeFilterData))
+        alert(JSON.stringify(activeFilterData.criteria))
     };
 
     function showForm() {
@@ -114,10 +104,44 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
         setCriteria([]);
     }
 
+    /*useEffect(() => {
+        if (criteriaContainerRoot.current) {
+            const criteriaRows = criteria.map((criterion) => (
+                <CriteriaRow
+                    filterCriteria={criterion}
+                    key={criterion.id}
+                    index={criterion.id}
+                    onRemove={handleRemoveCriteria}
+                    onChange={() => {  alert('FilterForm -> onChange:'); }}
+                />
+            ));
+            criteriaContainerRoot.current.render(criteriaRows);
+        }
+    }, [criteria]);*/
+
+//--------------------------------------------
+    useEffect(() => {
+        alert('alldata cjange')
+        //setAllData({ ...allData, [criteria]: criteria });
+    }   , [allData]);
+   // alert('neew crit: '+JSON.stringify({ ...allData, [criteria]: criteria }))
+
+    useEffect(() => {
+        alert('setActiveFilterData' +JSON.stringify(activeFilterData))
+        setActiveFilterData(activeFilterData);
+    }, [activeFilterData]);
+
+   //const [allData, setAllData] = useState(allData);
     function addFilterCriteriaRow() {
         const newCriterion = getDefaultCriterion();
         setCriteria([...criteria, newCriterion]);
     }
+
+    const handleFormDataChange = (name, value) => {
+        setAllData({ ...allData, [name]: value });
+        alert('Form:handleFormDataChange : '+JSON.stringify({ ...allData, [name]: value }))
+
+    };
 
     return (
         <div className="new-filter-form" id={"new-filter-form"} ref={newFilterFormRef}>
@@ -129,15 +153,23 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
                 </div>
 
                 <div className="modal-content">
-                    <div className="form-row form-group">
-                        <label>Filter name</label>
-                        <input id="filterName" className="input-field form-control" type="text" value={internalFilterData?.name}
-                               onChange={(e) => handleFormInternalChange('name', e.target.value)}/>
-                    </div>
 
                     <div className="form-row form-group">
-                        <label>Criteria</label>
-                        <span className="criteria-container"></span>
+                        <label>Filter name</label>
+                        <input id="filterName" className="input-field form-control" type="text"  value={activeFilterData?.name}
+                               onChange={(e) => handleFormDataChange('name', e.target.value)}/>
+                    </div>
+
+
+                    <div className="form-row form-group">
+                        <label> {activeFilterData?.criteria.length} Criteria</label>
+                        <span className="criteria-container">
+                            {activeFilterData?.criteria.map((criterion) => (
+                                <div>
+                                    {JSON.stringify(criterion)}
+                                </div>
+                            ))}
+                        </span>
                     </div>
 
                     <div className="form-row form-group text-center">
@@ -148,16 +180,16 @@ const FilterForm = React.forwardRef(({ filterData, onChange }, ref) => {
                         <label className="form-label">Usage</label>
                         <div className="radio-group">
                             <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="common" checked={internalFilterData?.selection === 'common'}
-                                       onChange={() => handleFormInternalChange('selection', 'common')} className="form-check-input"/>Common
+                                <input type="radio" name="selection" value="common" checked={activeFilterData?.selection === 'common'}
+                                       onChange={() => handleFormDataChange('selection', 'common')} className="form-check-input"/>Common
                             </label>
                             <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="rare" checked={internalFilterData?.selection === 'rare'}
-                                       onChange={() => handleFormInternalChange('selection', 'rare')} className="form-check-input"/>Rare
+                                <input type="radio" name="selection" value="rare" checked={activeFilterData?.selection === 'rare'}
+                                       onChange={() => handleFormDataChange('selection', 'rare')} className="form-check-input"/>Rare
                             </label>
                             <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="special" checked={internalFilterData?.selection === 'special'}
-                                       onChange={() => handleFormInternalChange('selection', 'special')} className="form-check-input"/>Special
+                                <input type="radio" name="selection" value="special" checked={activeFilterData?.selection === 'special'}
+                                       onChange={() => handleFormDataChange('selection', 'special')} className="form-check-input"/>Special
                             </label>
                         </div>
                     </div>
