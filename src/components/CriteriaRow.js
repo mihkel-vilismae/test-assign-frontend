@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getDefaultCriterion } from '../Entities/Criterion';
 
-function CriteriaRow({ filterCriteria, index, onChange, onRemove, id, allData,setAllData }) {
+function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, index, onChange, onRemove, id, allData,setAllData }) {
     //alertlog('CriteriaRow: ->'+JSON.stringify(filterCriteria));
     const [criterion, setCriterion] = useState(() => filterCriteria || getDefaultCriterion());
 
@@ -12,20 +12,34 @@ function CriteriaRow({ filterCriteria, index, onChange, onRemove, id, allData,se
 
     const handleTypeChange = (event) => {
         const newType = event.target.value;
-        setCriterion(prevCriterion => ({ ...prevCriterion, type: newType, value: '' }));
-        onChange(index, { ...criterion, type: newType, value: '' });
+        const updatedCriterion = { ...criterion, type: newType, value: '' };
+
+        setActiveFilterData((prevData) => ({
+            ...prevData,
+            criteria: prevData.criteria.map((prevCrit) => (prevCrit.id === updatedCriterion.id ? updatedCriterion : prevCrit)),
+        }));
     };
 
     const handleComparatorChange = (event) => {
         const newComparator = event.target.value;
-        setCriterion(prevCriterion => ({ ...prevCriterion, comparator: newComparator }));
-        onChange(index, { ...criterion, comparator: newComparator });
+        const updatedCriterion = { ...criterion, comparator: newComparator };
+        setCriterion(updatedCriterion);
+
+        setActiveFilterData((prevData) => ({
+            ...prevData,
+            criteria: prevData.criteria.map((prevCrit, i) => (prevCrit.id === updatedCriterion.id ? updatedCriterion : prevCrit)),
+        }));
     };
 
     const handleValueChange = (event) => {
         const newValue = event.target.value;
-        setCriterion(prevCriterion => ({ ...prevCriterion, value: newValue }));
-        onChange(index, { ...criterion, value: newValue });
+        const updatedCriterion = { ...criterion, value: newValue  };
+        setCriterion(updatedCriterion);
+
+        setActiveFilterData((prevData) => ({
+            ...prevData,
+            criteria: prevData.criteria.map((prevCrit, i) => (prevCrit.id === updatedCriterion.id ? updatedCriterion : prevCrit)),
+        }));
     };
 
     function amountSelectionCode() {

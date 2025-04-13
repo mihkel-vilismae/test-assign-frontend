@@ -1,17 +1,19 @@
 // ExistingFilters.js
 import React, { useEffect, useState } from 'react';
 import * as Database from '../Database';
-import {criteria} from "../App";
+import {alertLog, criteria} from "../App";
+export var hasData = false;
+export var debug = false;
 
-function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData}) {
-    const [filters, setFilters] = useState([]);
+function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData, allData}) {
+    const [filtersFromDb, setfiltersFromDb] = useState([]);
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null);     // Add error state
 
     // Function to handle the "edit filter" button click
     const handleEdit = (filter) => {
 
-        //alert('handleEdit Edit filter with ID: ' + JSON.stringify(filter));
+        //alertLog('handleEdit Edit filter with ID: ' + JSON.stringify(filter));
         //alertlog('handleEdit Edit filter with ID: ' + filter.id);
         setActiveFilterData(filter); // Call the callback function and pass the data
     };
@@ -32,15 +34,17 @@ function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData}) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                alert(JSON.stringify(data))
-                setFilters(data);
-               // setAllData(data);
-               // alert('ExistingFilters '+JSON.stringify(allData))
+                if (debug)
+                alertLog('from db: ' + JSON.stringify(data))
+                hasData = true;
+                setfiltersFromDb(data);
+                setAllData(data);
+               // alertLog('ExistingFilters '+JSON.stringify(allData))
             } catch (error) {
                 setError(error);  // Set the error state
             } finally {
                 setLoading(false); // Set loading to false after fetching (regardless of success or failure)
-
+             //   debug = true;
             }
         };
 
@@ -59,6 +63,7 @@ function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData}) {
         <table id="existing-filters" className="table table-striped">
             <thead className="thead-dark">
             <tr>
+                <th>id</th>
                 <th>Name</th>
                 <th>Usage</th>
                 <th>Criteria</th>
@@ -66,8 +71,9 @@ function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData}) {
             </tr>
             </thead>
             <tbody>
-                {filters.map((filter, index) => (
+                {allData.map((filter, index) => (
                 <tr key={index}>
+                    <td>{filter.id}</td>
                     <td>{filter.name}</td>
                     <td>{filter.selection}</td>
                     <td>

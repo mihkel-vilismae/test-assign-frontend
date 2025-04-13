@@ -2,11 +2,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
-import ExistingFilters from "./components/ExistingFilters";
+import ExistingFilters, {debug, hasData} from "./components/ExistingFilters";
 import FilterForm from "./components/FilterForm";
 import {Modal} from "./components/Modal";
 import * as Database from "./Database";
-import Criterion from "./Entities/Criterion";
+import Criterion, {getDefaultActiveFilter} from "./Entities/Criterion";
 
 export const criteria = {
     id: '',
@@ -14,6 +14,11 @@ export const criteria = {
     comparator: '',
     value: ''
 };
+export const showAlert = false;
+export const alertLog = (text) => {
+    if (!showAlert) return
+  alert(text)
+}
 
 function App() {
 
@@ -40,7 +45,7 @@ function App() {
     };
 
     const filterValuesChanged = (data) => {
-        alert('Filter Values Changed: ' + JSON.stringify(data));
+        alertLog('Filter Values Changed: ' + JSON.stringify(data));
         setInternalFilterData(data);
     }
 
@@ -60,13 +65,15 @@ function App() {
     const receiveDataFromChild = (data) => {
         setEditFilterFromChild(data);
     };
-    const [allData, setAllData] = useState([{name: '',selection:'',criteria: [Criterion]}]);
-    const [activeFilterData, setActiveFilterData] = useState(null);
+    const [allData, setAllData] = useState([{name: '',selection:'',criteria: [{}]}]);
+    const [activeFilterData, setActiveFilterData] = useState(getDefaultActiveFilter());
     //{name: '',selection:'',criteria: [Criterion]}
 
 
     useEffect(() => {
-        alert('setNme '+JSON.stringify(allData))
+        if (!hasData) return;
+        if (!debug) return;
+        alertLog('app allData ch '+JSON.stringify(allData))
     }, [allData]);
 
     return (
@@ -80,6 +87,8 @@ function App() {
                 <div className="rect-area alert alert-success">
                     <div className="center-content text-center">
                         <ExistingFilters
+                            allData={allData}
+                            setAllData={setAllData }
                             onDataChange={receiveDataFromChild}
                             onChooseFilter={setActiveFilterData}/>
                     </div>

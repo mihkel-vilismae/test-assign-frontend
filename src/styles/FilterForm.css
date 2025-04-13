@@ -82,7 +82,22 @@ label {
 }
 
 .criteria-row {
-    float: right;
+
+}
+
+.bg-color1 {
+    background-color: blanchedalmond;
+    color: black;
+}
+
+
+.bg-color2 {
+    background-color: chartreuse;
+    color: black;
+}
+
+.btn-footer {
+    pointer-events: auto;
 }
 
 .criteria-container {
