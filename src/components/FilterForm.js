@@ -34,12 +34,12 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, fil
 
     const handleRemoveCriteria = (id) => {
         alertLog(id)
-        alertLog(JSON.stringify(activeFilterData))
+        /*alertLog(JSON.stringify(activeFilterData))
         alertLog(JSON.stringify(activeFilterData.criteria))
         setCriteria(prevCriteria => prevCriteria.filter(criterion => criterion.id !== id));
         setAllData(...allData, criteria);
         alertLog(JSON.stringify(activeFilterData))
-        alertLog(JSON.stringify(activeFilterData.criteria))
+        alertLog(JSON.stringify(activeFilterData.criteria))*/
     };
 
     function showForm() {
@@ -150,34 +150,39 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, fil
         <div className="new-filter-form" id={"new-filter-form"} ref={newFilterFormRef}>
             <div className="filter-modal modal-dialog">
                 <div className="modal-header bg-primary text-white">
-                    <span>activeFilterData</span>
+                    <span>activeFilter Fields</span>
                     <div
-                        className={'bg-color1'}> {activeFilterData ? (JSON.stringify(Object.fromEntries(Object.entries(activeFilterData).filter(([key]) => key !== 'criteria')), null, 2)) : ('no filter selected')} </div>
-                    <br/>
+                        className={'bg-color1'}> {activeFilterData ? (JSON.stringify(Object.fromEntries(Object.entries(activeFilterData).filter(([key]) => key !== 'criteria')), null, 2)) : ('no filter selected')}
+                    </div>
+                </div>
+                <div className="modal-header bg-primary text-white">
+                    <span>activeFilter Criteria</span>
                     <div
-                        className={'bg-color2'}>{activeFilterData ? JSON.stringify(activeFilterData['criteria'], null, 2) : 'no filter selected'}</div>
-                    <span onClick={closeForm} className="close">✖</span>
+                        className={'bg-color2'}>
+                        {activeFilterData ? JSON.stringify(activeFilterData['criteria'], null, 2) : 'no filter selected'}
+                    </div>
                 </div>
                 <div className="modal-header bg-primary text-white">
                     <span>alldata Filter</span>
                     <div
-                        className={'bg-color2'}>{allData && activeFilterData?.id ? JSON.stringify(allData.filter(item => item.id === activeFilterData.id), null, 2) : 'no filter selected'}</div>
+                        className={'bg-color2'}>{allData && activeFilterData?.id ? JSON.stringify(allData.filter(item => item.id === activeFilterData.id), null, 2) : 'no filter selected'}
+                    </div>
                     <span onClick={closeForm} className="close">✖</span>
                 </div>
 
-                <div className="modal-content">
+                    <div className="modal-content">
 
-                    <div className="form-row form-group">
-                        <label>Filter name {activeFilterData?.id}</label>
-                        <input id="filterName" className="input-field form-control" type="text"
-                               value={activeFilterData?.name}
-                               onChange={(e) => handleFormDataChange('name', e.target.value)}/>
-                    </div>
+                        <div className="form-row form-group">
+                            <label>Filter name {activeFilterData?.id}</label>
+                            <input id="filterName" className="input-field form-control" type="text"
+                                   value={activeFilterData?.name}
+                                   onChange={(e) => handleFormDataChange('name', e.target.value)}/>
+                        </div>
 
 
-                    <div className="form-row form-group">
-                        <label> {activeFilterData?.criteria.length} Criteria</label>
-                        <span className="criteria-container">
+                        <div className="form-row form-group">
+                            <label> {activeFilterData?.criteria.length} Criteria</label>
+                            <span className="criteria-container">
                             {activeFilterData?.criteria.map((criterion) => (
                                 <div>
                                     <CriteriaRow
@@ -190,44 +195,44 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, fil
                                 </div>
                             ))}
                         </span>
-                    </div>
+                        </div>
 
-                    <div className="form-row form-group text-center">
-                        <button className="mx-auto btn btn-light" onClick={addFilterCriteriaRow}>+ Add Row</button>
-                    </div>
+                        <div className="form-row form-group text-center">
+                            <button className="mx-auto btn btn-light" onClick={addFilterCriteriaRow}>+ Add Row</button>
+                        </div>
 
-                    <div className="form-row form-group">
-                        <label className="form-label">Usage</label>
-                        <div className="radio-group">
-                            <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="common"
-                                       checked={activeFilterData?.selection === 'common'}
-                                       onChange={() => handleFormDataChange('selection', 'common')}
-                                       className="form-check-input"/>Common
-                            </label>
-                            <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="rare"
-                                       checked={activeFilterData?.selection === 'rare'}
-                                       onChange={() => handleFormDataChange('selection', 'rare')}
-                                       className="form-check-input"/>Rare
-                            </label>
-                            <label className="radio-label form-check">
-                                <input type="radio" name="selection" value="special"
-                                       checked={activeFilterData?.selection === 'special'}
-                                       onChange={() => handleFormDataChange('selection', 'special')}
-                                       className="form-check-input"/>Special
-                            </label>
+                        <div className="form-row form-group">
+                            <label className="form-label">Usage</label>
+                            <div className="radio-group">
+                                <label className="radio-label form-check">
+                                    <input type="radio" name="selection" value="common"
+                                           checked={activeFilterData?.selection === 'common'}
+                                           onChange={() => handleFormDataChange('selection', 'common')}
+                                           className="form-check-input"/>Common
+                                </label>
+                                <label className="radio-label form-check">
+                                    <input type="radio" name="selection" value="rare"
+                                           checked={activeFilterData?.selection === 'rare'}
+                                           onChange={() => handleFormDataChange('selection', 'rare')}
+                                           className="form-check-input"/>Rare
+                                </label>
+                                <label className="radio-label form-check">
+                                    <input type="radio" name="selection" value="special"
+                                           checked={activeFilterData?.selection === 'special'}
+                                           onChange={() => handleFormDataChange('selection', 'special')}
+                                           className="form-check-input"/>Special
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="modal-footer">
-                    <button onClick={saveForm} className="btn btn-footer btn-secondary">SAVE</button>
-                    <button onClick={closeForm} className="btn btn-footer btn-secondary">CLOSE</button>
+                    <div className="modal-footer">
+                        <button onClick={saveForm} className="btn btn-footer btn-secondary">SAVE</button>
+                        <button onClick={closeForm} className="btn btn-footer btn-secondary">CLOSE</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-});
+            );
+            });
 
-export default FilterForm;
+            export default FilterForm;

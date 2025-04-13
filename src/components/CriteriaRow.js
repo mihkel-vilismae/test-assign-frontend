@@ -132,8 +132,15 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
     };*/
 
     const handleRemove = () => {
-        console.log(`Removing criterion at index ${index}:`, criterion);
-        onRemove(criterion.id);
+        if (!criterion) {
+            console.error(`Cannot remove criterion at index ${index}: criterion is null or undefined.`);
+            return;
+        }
+
+        setActiveFilterData((prevData) => ({
+            ...prevData,
+            criteria: prevData.criteria.filter((prevCrit) => prevCrit.id !== criterion.id),
+        }));
     };
 
     return (

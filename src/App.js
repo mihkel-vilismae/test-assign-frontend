@@ -73,7 +73,7 @@ function App() {
     useEffect(() => {
         if (!hasData) return;
         if (!debug) return;
-        alertLog('app allData ch '+JSON.stringify(allData))
+        alertLog('app allData change '+JSON.stringify(allData))
     }, [allData]);
 
     return (

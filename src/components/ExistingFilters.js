@@ -71,8 +71,8 @@ function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData, allD
             </tr>
             </thead>
             <tbody>
-                {allData.map((filter, index) => (
-                <tr key={index}>
+            {allData.map((filter) => (
+                <tr key={filter.id}>
                     <td>{filter.id}</td>
                     <td>{filter.name}</td>
                     <td>{filter.selection}</td>
