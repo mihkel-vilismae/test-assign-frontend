@@ -1,6 +1,6 @@
 // App.js
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './styles/App.css';
 import ExistingFilters, {debug, hasData} from "./components/ExistingFilters";
 import FilterForm from "./components/FilterForm";
@@ -16,8 +16,6 @@ export const alertLog = (text) => {
 function App() {
 
     const [showModal, setShowModal] = useState(false);
-    const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
-    const formContentRef = useRef(null); // Ref to access the FilterForm in the modal
     const [allData, setAllData] = useState([{name: '', selection: '', criteria: [{}]}]);
     const [activeFilterData, setActiveFilterData] = useState(getDefaultActiveFilter());
 
@@ -65,7 +63,6 @@ function App() {
                 <div className="rect-area alert alert-info" id="add-filter">
                     <div className="center-content text-center">
                         <FilterForm
-                            ref={formContentRef}
                             allData={allData}
                             setAllData={setAllData}
                             activeFilterData={activeFilterData}
@@ -78,7 +75,6 @@ function App() {
                     isOpen={showModal}
                 >
                     <FilterForm
-                        ref={modalContentRef}
                         allData={allData}
                         setAllData={setAllData}
                         activeFilterData={activeFilterData}

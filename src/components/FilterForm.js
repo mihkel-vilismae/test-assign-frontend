@@ -1,16 +1,15 @@
-import React, { useRef  } from 'react';
+import React from 'react';
 import '../styles/FilterForm.css';
-import { getDefaultCriterion } from '../Entities/DataObjects';
+import {getDefaultCriterion} from '../Entities/DataObjects';
 import CriteriaRow from './CriteriaRow';
 
-const FilterForm = React.forwardRef(({
-                                         setActiveFilterData,
-                                         activeFilterData,
-                                         onClose,
-                                         allData,
-                                         setAllData
-                                     }, ref) => {
-    const newFilterFormRef = useRef(null);
+function FilterForm({
+                        setActiveFilterData,
+                        activeFilterData,
+                        onClose,
+                        allData,
+                        setAllData
+                    }) {
 
     const handleRemoveCriteria = (id) => {
         setActiveFilterData((prevData) => ({
@@ -22,7 +21,7 @@ const FilterForm = React.forwardRef(({
     const addFilterCriteriaRow = () => {
         const newCriterion = getDefaultCriterion();
         const updatedCriteria = [...activeFilterData.criteria, newCriterion];
-        setActiveFilterData({ ...activeFilterData, criteria: updatedCriteria });
+        setActiveFilterData({...activeFilterData, criteria: updatedCriteria});
     };
 
     const saveActiveFilter = (newData) => {
@@ -34,17 +33,17 @@ const FilterForm = React.forwardRef(({
                 return [...prevAllData, newData];
             }
             return prevAllData.map((filter) =>
-                filter.id === filterId ? { ...filter, ...newData } : filter
+                filter.id === filterId ? {...filter, ...newData} : filter
             );
         });
     };
 
     const handleFormDataChange = (name, value) => {
-        setActiveFilterData({ ...activeFilterData, [name]: value });
+        setActiveFilterData({...activeFilterData, [name]: value});
     };
 
     return (
-        <div className="new-filter-form" id="new-filter-form" ref={newFilterFormRef}>
+        <div className="new-filter-form" id="new-filter-form">
             <div className="filter-modal modal-dialog">
                 <div className="modal-header bg-primary text-white">
                     <span>activeFilter Fields</span>
@@ -69,7 +68,7 @@ const FilterForm = React.forwardRef(({
                     </div>
                 </div>
                 <div className="modal-header bg-primary text-white">
-                    <span>alldata Filter</span>
+                    <span>Alldata Filter</span>
                     <div className="bg-color2">
                         {allData && activeFilterData?.id
                             ? JSON.stringify(allData.filter((item) => item.id === activeFilterData.id), null, 2)
@@ -164,6 +163,6 @@ const FilterForm = React.forwardRef(({
             </div>
         </div>
     );
-});
+}
 
 export default FilterForm;
