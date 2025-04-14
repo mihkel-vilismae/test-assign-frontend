@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {getDefaultCriterion} from '../Entities/DataObjects';
+import {getDefaultCriterion} from '../entities/DataObjects';
 
 function CriteriaRow({
                          setActiveFilterData,

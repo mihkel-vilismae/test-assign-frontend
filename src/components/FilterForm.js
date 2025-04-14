@@ -1,7 +1,8 @@
 import React from 'react';
 import '../styles/FilterForm.css';
-import {getDefaultCriterion} from '../Entities/DataObjects';
+import {getDefaultCriterion} from '../entities/DataObjects';
 import CriteriaRow from './CriteriaRow';
+import {activeFilterCriteriaDebug, activeFilterNoCriteriaDebug, commitedFiltersDebug, debug} from "../utils/Debug";
 
 function FilterForm({
                         setActiveFilterData,
@@ -45,41 +46,16 @@ function FilterForm({
     return (
         <div className="new-filter-form" id="new-filter-form">
             <div className="filter-modal modal-dialog">
-                <div className="modal-header bg-primary text-white">
-                    <span>activeFilter Fields</span>
-                    <div className="bg-color1">
-                        {activeFilterData
-                            ? JSON.stringify(
-                                Object.fromEntries(
-                                    Object.entries(activeFilterData).filter(([key]) => key !== 'criteria')
-                                ),
-                                null,
-                                2
-                            )
-                            : 'no filter selected'}
-                    </div>
-                </div>
-                <div className="modal-header bg-primary text-white">
-                    <span>activeFilter Criteria</span>
-                    <div className="bg-color2">
-                        {activeFilterData
-                            ? JSON.stringify(activeFilterData.criteria, null, 2)
-                            : 'no filter selected'}
-                    </div>
-                </div>
-                <div className="modal-header bg-primary text-white">
-                    <span>Alldata Filter</span>
-                    <div className="bg-color2">
-                        {allData && activeFilterData?.id
-                            ? JSON.stringify(allData.filter((item) => item.id === activeFilterData.id), null, 2)
-                            : 'no filter selected'}
-                    </div>
-                    <span onClick={onClose} className="close">✖</span>
-                </div>
-
+                {debug && (
+                <>
+                    {activeFilterNoCriteriaDebug(activeFilterData)}
+                    {activeFilterCriteriaDebug(activeFilterData)}
+                    {commitedFiltersDebug(allData, activeFilterData)}
+                </>
+                )}
                 <div className="modal-content">
                     <div className="form-row form-group">
-                        <label>Filter name {activeFilterData?.id}</label>
+                        <label>Filter name {debug ? activeFilterData?.id : ""}</label>
                         <input
                             id="filterName"
                             className="input-field form-control"

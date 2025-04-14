@@ -96,7 +96,7 @@ label {
     color: black;
 }
 
-.btn-footer {
+.btn-footer, .close {
     pointer-events: auto;
 }
 

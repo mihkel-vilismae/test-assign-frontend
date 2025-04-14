@@ -2,12 +2,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState} from 'react';
 import './styles/App.css';
-import ExistingFilters, {debug, hasData} from "./components/ExistingFilters";
+import ExistingFilters from "./components/ExistingFilters";
 import FilterForm from "./components/FilterForm";
 import {Modal} from "./components/Modal";
-import {getDefaultActiveFilter} from "./Entities/DataObjects";
+import {getDefaultActiveFilter} from "./entities/DataObjects";
+import {debug, showAlert} from "./utils/Debug";
 
-export const showAlert = false;
+
 export const alertLog = (text) => {
     if (!showAlert) return
     alert(text)
@@ -38,7 +39,6 @@ function App() {
     }
 
     useEffect(() => {
-        if (!hasData) return;
         if (!debug) return;
         alertLog('app allData change ' + JSON.stringify(allData))
     }, [allData]);

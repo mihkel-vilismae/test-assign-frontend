@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as Database from '../Database';
-import { alertLog } from "../App";
-
-export var hasData = false;
-export var debug = false;
+import * as Database from '../utils/Database';
 
 function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allData }) {
     const [loading, setLoading] = useState(true);
@@ -24,9 +20,6 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                if (debug)
-                    alertLog('from db: ' + JSON.stringify(data));
-                hasData = true;
                 setAllData(data);
             } catch (error) {
                 setError(error);
