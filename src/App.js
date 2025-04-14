@@ -1,7 +1,7 @@
 // App.js
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useRef, useState} from 'react';
-import './App.css';
+import './styles/App.css';
 import ExistingFilters, {debug, hasData} from "./components/ExistingFilters";
 import FilterForm from "./components/FilterForm";
 import {Modal} from "./components/Modal";
@@ -15,13 +15,11 @@ export const alertLog = (text) => {
 
 function App() {
 
-    const [editFilterFromChild, setEditFilterFromChild] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [filterData, setFilterData] = useState({}); // State to hold filter data
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
     const formContentRef = useRef(null); // Ref to access the FilterForm in the modal
-    const [internalFilterData, setInternalFilterData] = useState({});
-
+    const [allData, setAllData] = useState([{name: '', selection: '', criteria: [{}]}]);
+    const [activeFilterData, setActiveFilterData] = useState(getDefaultActiveFilter());
 
     const openModal = () => {
         setShowModal(true);
@@ -40,32 +38,6 @@ function App() {
     function emptyForm() {
         setActiveFilterData(getDefaultActiveFilter())
     }
-
-    const filterValuesChanged = (data) => {
-        alertLog('Filter Values Changed: ' + JSON.stringify(data));
-        setInternalFilterData(data);
-    }
-
-    useEffect(() => {
-        updateModalValues(internalFilterData);
-    }, [internalFilterData]);
-
-    const updateModalValues = (internalFilterData) => {
-        if (!internalFilterData) return;
-        // Access the FilterForm's internal state using the ref
-        //  const updatedFilterData = modalContentRef.current.getFilterData();
-        //modalContentRef.current.filterData(internalFilterData);
-        //formContentRef.current.filterData(internalFilterData);
-        console.log('Saved Filter Data:', internalFilterData);
-        setFilterData(internalFilterData); // Update the parent state
-    };
-    const receiveDataFromChild = (data) => {
-        setEditFilterFromChild(data);
-    };
-    const [allData, setAllData] = useState([{name: '', selection: '', criteria: [{}]}]);
-    const [activeFilterData, setActiveFilterData] = useState(getDefaultActiveFilter());
-    //{name: '',selection:'',criteria: [Criterion]}
-
 
     useEffect(() => {
         if (!hasData) return;
@@ -86,7 +58,6 @@ function App() {
                         <ExistingFilters
                             allData={allData}
                             setAllData={setAllData}
-                            onDataChange={receiveDataFromChild}
                             onChooseFilter={setActiveFilterData}
                         />
                     </div>

@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef  } from 'react';
 import '../styles/FilterForm.css';
-import { getDefaultActiveFilter, getDefaultCriterion } from '../Entities/DataObjects';
+import { getDefaultCriterion } from '../Entities/DataObjects';
 import CriteriaRow from './CriteriaRow';
-import { alertLog } from '../App';
 
 const FilterForm = React.forwardRef(({
                                          setActiveFilterData,
