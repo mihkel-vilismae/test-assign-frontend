@@ -41,7 +41,6 @@ function FilterForm({
                     filter.id === filterId ? {...filter, ...newData} : filter
                 );
             });
-        alert(JSON.stringify(newData))
         saveDataToDatabase(newData).then(r => {});
     };
 
@@ -56,11 +55,9 @@ function FilterForm({
         const isCreate = filterData.id === null;
         const isUpdate = !isCreate;
         const url = isCreate ? Database.getCreateUrl() : Database.getUpdateUrl(filterData.id);
-        alert(url)
         fetch(url, {
             method: isCreate ? 'POST' : 'PUT',
             //mode: 'no-cors',
-
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as Database from "../utils/Database";
+import {debug} from "../utils/Debug";
 
 function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allData }) {
     const [loading, setLoading] = useState(true);
@@ -45,7 +46,7 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
             <thead className="thead-dark">
             <tr>
                 <th>id</th>
-                <th>xxx</th>
+                {debug && <th></th>}
                 <th>Name</th>
                 <th>Usage</th>
                 <th>Criteria</th>
@@ -56,11 +57,11 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
             {allData.map((filter) => (
                 <tr key={filter.id}>
                     <td>{filter.id}</td>
-                    <td>{JSON.stringify(filter)}</td>
+                    {debug && <td>{JSON.stringify(filter)}</td>}
                     <td>{filter.name}</td>
                     <td>{filter.selection}</td>
                     <td>
-                        <ul className="list-unstyled">
+                        <ul className="list">
                             {(filter.criteria).map((criterion) => (
                                 <li key={criterion.id}>
                                     {criterion.type} {criterion.comparator} {criterion.value}
