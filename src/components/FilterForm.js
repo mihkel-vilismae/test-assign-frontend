@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/FilterForm.css';
 import {getDefaultCriterion} from '../entities/DataObjects';
 import CriteriaRow from './CriteriaRow';
 import {activeFilterCriteriaDebug, activeFilterNoCriteriaDebug, commitedFiltersDebug, debug} from "../utils/Debug";
+import * as Database from "../utils/Database";
 
 function FilterForm({
                         setActiveFilterData,
@@ -11,6 +12,9 @@ function FilterForm({
                         allData,
                         setAllData
                     }) {
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const handleRemoveCriteria = (id) => {
         setActiveFilterData((prevData) => ({
@@ -27,31 +31,110 @@ function FilterForm({
 
     const saveActiveFilter = (newData) => {
         const filterId = newData.id;
-        const isNew = !allData.some((filter) => filter.id === filterId);
+        const isNew = newData.id === null;
 
-        setAllData((prevAllData) => {
-            if (isNew) {
-                return [...prevAllData, newData];
-            }
-            return prevAllData.map((filter) =>
-                filter.id === filterId ? {...filter, ...newData} : filter
-            );
-        });
+        if (isNew) {
+            newData.isNew = true;
+        } else
+            setAllData((prevAllData) => {
+                return prevAllData.map((filter) =>
+                    filter.id === filterId ? {...filter, ...newData} : filter
+                );
+            });
+        alert(JSON.stringify(newData))
+        saveDataToDatabase(newData).then(r => console.log(r));
     };
 
     const handleFormDataChange = (name, value) => {
         setActiveFilterData({...activeFilterData, [name]: value});
     };
 
+    const saveDataToDatabase = async (filterData) => {
+        setActiveFilterData(filterData);
+        setLoading(true);
+        setError(null);
+        console.log(filterData)
+
+        const url = filterData.id === null ? Database.getCreateUrl() : Database.getUpdateUrl(filterData.id);
+        alert(url)
+        fetch(url, {
+            method: filterData.id === null ? 'POST' : 'PUT',
+            //mode: 'no-cors',
+
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(filterData),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then((resultFilter) => {
+                console.log(resultFilter.id)
+
+                // find specific filter with id=result.id from alldata
+                //allData.find((filter)=>filter.id === result.id);
+                ///setActiveFilterData({...filterData,{}});
+                console.log(filterData)
+                setAllData((prevAllData) => {
+                    return [...prevAllData, resultFilter]
+                });
+                setActiveFilterData(resultFilter);
+                console.log(resultFilter)
+
+
+                // filter allData and remove where id === null
+                //setAllData(allData.filter((filterData) => filterData.id !== null));
+
+
+                return resultFilter;
+            })
+            .catch((error) => {
+                console.error('Error saving data:', error);
+                setError(error);
+                throw error;
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+    const deleteFilter = async (filterToDelete) => {
+        try {
+            const url = Database.getDeleteUrl(filterToDelete.id);
+            const response = await fetch(url, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+            }
+
+            return await response.json()
+                .then(()=>{removeFilterFromAllData(filterToDelete)})
+        } catch (error) {
+            console.error('Error deleting filter:', error);
+            throw error;
+        }
+    };
+
+    function removeFilterFromAllData(filterToRemove) {
+        setAllData(allData.filter((filterData) => filterData.id === filterToRemove.id));
+    }
+
+
     return (
         <div className="new-filter-form" id="new-filter-form">
             <div className="filter-modal modal-dialog">
                 {debug && (
-                <>
-                    {activeFilterNoCriteriaDebug(activeFilterData)}
-                    {activeFilterCriteriaDebug(activeFilterData)}
-                    {commitedFiltersDebug(allData, activeFilterData)}
-                </>
+                    <>
+                        {activeFilterNoCriteriaDebug(activeFilterData)}
+                        {activeFilterCriteriaDebug(activeFilterData)}
+                        {commitedFiltersDebug(allData, activeFilterData)}
+                    </>
                 )}
                 <div className="modal-content">
                     <div className="form-row form-group">
@@ -130,8 +213,16 @@ function FilterForm({
 
                 <div className="modal-footer">
                     <button onClick={() => saveActiveFilter(activeFilterData)} className="btn btn-footer btn-secondary">
-                        SAVE
+                        {activeFilterData.id === null ? 'SAVE' : 'UPDATE'}
                     </button>
+                    {activeFilterData.id !== null && (
+                        <>
+                            <button onClick={() => deleteFilter(activeFilterData).then(() => onClose)}
+                                    className="btn btn-footer btn-secondary">
+                                DELETE
+                            </button>
+                        </>
+                    )}
                     <button onClick={onClose} className="btn btn-footer btn-secondary">
                         CLOSE
                     </button>

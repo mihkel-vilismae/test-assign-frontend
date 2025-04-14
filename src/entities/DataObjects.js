@@ -22,7 +22,7 @@ export function getDefaultCriterion() {
 }
 
 export function getDefaultActiveFilter() {
-    return new ActiveFilter(Date.now(), '', 'common', []);
+    return new ActiveFilter(null, '', 'common', []);
 }
 
 export default Criterion;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as Database from '../utils/Database';
+import * as Database from "../utils/Database";
 
 function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allData }) {
     const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
             setError(null);
 
             try {
-                const response = await fetch(Database.GET);
+                const response = await fetch(Database.getFiltersUrl());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -28,7 +28,7 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
             }
         };
         fetchData();
-    }, [setAllData]);
+    }, []);
 
     if (loading) {
         return <div>Loading filters...</div>;
@@ -38,11 +38,14 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
         return <div>Error: {error.message}</div>;
     }
 
+
+
     return (
         <table id="existing-filters" className="table table-striped">
             <thead className="thead-dark">
             <tr>
                 <th>id</th>
+                <th>xxx</th>
                 <th>Name</th>
                 <th>Usage</th>
                 <th>Criteria</th>
@@ -53,6 +56,7 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
             {allData.map((filter) => (
                 <tr key={filter.id}>
                     <td>{filter.id}</td>
+                    <td>{JSON.stringify(filter)}</td>
                     <td>{filter.name}</td>
                     <td>{filter.selection}</td>
                     <td>
