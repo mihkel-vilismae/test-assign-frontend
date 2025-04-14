@@ -61,7 +61,7 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
                     <td>{filter.selection}</td>
                     <td>
                         <ul className="list-unstyled">
-                            {(filter.criteria || []).map((criterion) => (
+                            {(filter.criteria).map((criterion) => (
                                 <li key={criterion.id}>
                                     {criterion.type} {criterion.comparator} {criterion.value}
                                 </li>

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../styles/FilterForm.css';
-import {getDefaultCriterion} from '../entities/DataObjects';
+import {getDefaultActiveFilter, getDefaultCriterion} from '../entities/DataObjects';
 import CriteriaRow from './CriteriaRow';
 import {activeFilterCriteriaDebug, activeFilterNoCriteriaDebug, commitedFiltersDebug, debug} from "../utils/Debug";
 import * as Database from "../utils/Database";
@@ -54,11 +54,12 @@ function FilterForm({
         setLoading(true);
         setError(null);
         console.log(filterData)
-
-        const url = filterData.id === null ? Database.getCreateUrl() : Database.getUpdateUrl(filterData.id);
+        const isCreate = filterData.id === null;
+        const isUpdate = !isCreate;
+        const url = isCreate ? Database.getCreateUrl() : Database.getUpdateUrl(filterData.id);
         alert(url)
         fetch(url, {
-            method: filterData.id === null ? 'POST' : 'PUT',
+            method: isCreate ? 'POST' : 'PUT',
             //mode: 'no-cors',
 
             headers: {
@@ -73,22 +74,22 @@ function FilterForm({
                 return response.json();
             })
             .then((resultFilter) => {
-                console.log(resultFilter.id)
+                console.log('resultFilter',resultFilter)
 
-                // find specific filter with id=result.id from alldata
-                //allData.find((filter)=>filter.id === result.id);
-                ///setActiveFilterData({...filterData,{}});
-                console.log(filterData)
-                setAllData((prevAllData) => {
-                    return [...prevAllData, resultFilter]
-                });
+                if (!Array.isArray(resultFilter.criteria))
+                    resultFilter.criteria=Array.from(resultFilter.criteria)
+
+                if (isCreate)
+                    setAllData((prevAllData) => {
+                        return [...prevAllData, resultFilter]
+                    });
+                else if (isUpdate) {
+                    // find specific filter with id=result.id from alldata
+                  //  const existingFilter = allData.find((filter) => filter.id === resultFilter.id);
+                    //existingFilter = resultFilter;
+                }
                 setActiveFilterData(resultFilter);
                 console.log(resultFilter)
-
-
-                // filter allData and remove where id === null
-                //setAllData(allData.filter((filterData) => filterData.id !== null));
-
 
                 return resultFilter;
             })
@@ -103,26 +104,29 @@ function FilterForm({
     };
 
     const deleteFilter = async (filterToDelete) => {
-        try {
-            const url = Database.getDeleteUrl(filterToDelete.id);
-            const response = await fetch(url, {
-                method: 'DELETE',
+        setLoading(true);
+        setError(null);
+        const url = Database.getDeleteUrl(filterToDelete.id);
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }})
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+                }
+                setActiveFilterData(getDefaultActiveFilter());
+                removeFilterFromAllData(filterToDelete);
+                return true;
+            })
+            .finally(() => {
+                setLoading(false);
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
-            }
-
-            return await response.json()
-                .then(()=>{removeFilterFromAllData(filterToDelete)})
-        } catch (error) {
-            console.error('Error deleting filter:', error);
-            throw error;
-        }
     };
 
     function removeFilterFromAllData(filterToRemove) {
-        setAllData(allData.filter((filterData) => filterData.id === filterToRemove.id));
+        setAllData(allData.filter((filterData) => filterData.id !== filterToRemove.id));
     }
 
 
