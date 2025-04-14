@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { getDefaultCriterion } from '../Entities/DataObjects';
+import React, {useState, useEffect} from 'react';
+import {getDefaultCriterion} from '../Entities/DataObjects';
 
-function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, index, onChange, onRemove, id, allData,setAllData }) {
+function CriteriaRow({
+                         setActiveFilterData,
+                         activeFilterData,
+                         filterCriteria,
+                         index,
+                         onChange,
+                         onRemove,
+                         id,
+                         allData,
+                         setAllData
+                     }) {
     const [criterion, setCriterion] = useState(() => filterCriteria || getDefaultCriterion());
 
     useEffect(() => {
-        setCriterion(filterCriteria );
+        setCriterion(filterCriteria);
     }, [filterCriteria]);
 
     const handleTypeChange = (event) => {
         const newType = event.target.value;
-        const updatedCriterion = { ...criterion, type: newType, value: '' };
+        const updatedCriterion = {...criterion, type: newType, value: ''};
 
         setActiveFilterData((prevData) => ({
             ...prevData,
@@ -20,7 +30,7 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
 
     const handleComparatorChange = (event) => {
         const newComparator = event.target.value;
-        const updatedCriterion = { ...criterion, comparator: newComparator };
+        const updatedCriterion = {...criterion, comparator: newComparator};
         setCriterion(updatedCriterion);
 
         setActiveFilterData((prevData) => ({
@@ -31,7 +41,7 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
 
     const handleValueChange = (event) => {
         const newValue = event.target.value;
-        const updatedCriterion = { ...criterion, value: newValue  };
+        const updatedCriterion = {...criterion, value: newValue};
         setCriterion(updatedCriterion);
 
         setActiveFilterData((prevData) => ({
@@ -132,7 +142,8 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
 
     return (
         <div className="criteria-row">
-            <select className="criteria-select input-field" id={criterion.id} value={criterion.type} onChange={handleTypeChange}>
+            <select className="criteria-select input-field" id={criterion.id} value={criterion.type}
+                    onChange={handleTypeChange}>
                 <option value="amount">Amount</option>
                 <option value="title">Title</option>
                 <option value="date">Date</option>

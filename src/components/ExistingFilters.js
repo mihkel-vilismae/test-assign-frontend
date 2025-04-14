@@ -1,11 +1,12 @@
 // ExistingFilters.js
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Database from '../Database';
 import {alertLog} from "../App";
+
 export var hasData = false;
 export var debug = false;
 
-function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData, allData}) {
+function ExistingFilters({onChooseFilter: setActiveFilterData, setAllData, allData}) {
     const [loading, setLoading] = useState(true); // Add loading state
     const [error, setError] = useState(null);     // Add error state
 
@@ -27,7 +28,7 @@ function ExistingFilters({onChooseFilter: setActiveFilterData,  setAllData, allD
                 }
                 const data = await response.json();
                 if (debug)
-                alertLog('from db: ' + JSON.stringify(data))
+                    alertLog('from db: ' + JSON.stringify(data))
                 hasData = true;
                 setAllData(data);
             } catch (error) {

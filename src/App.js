@@ -16,7 +16,7 @@ export const criteria = {
 export const showAlert = false;
 export const alertLog = (text) => {
     if (!showAlert) return
-  alert(text)
+    alert(text)
 }
 
 function App() {
@@ -40,8 +40,8 @@ function App() {
 
     const handleClose = () => {
         emptyForm();
-      if (showModal)
-          closeModal();
+        if (showModal)
+            closeModal();
     }
 
     function emptyForm() {
@@ -56,7 +56,7 @@ function App() {
 
     useEffect(() => {
         updateModalValues(internalFilterData);
-    }   , [internalFilterData]);
+    }, [internalFilterData]);
 
     const updateModalValues = (internalFilterData) => {
         if (!internalFilterData) return;
@@ -70,7 +70,7 @@ function App() {
     const receiveDataFromChild = (data) => {
         setEditFilterFromChild(data);
     };
-    const [allData, setAllData] = useState([{name: '',selection:'',criteria: [{}]}]);
+    const [allData, setAllData] = useState([{name: '', selection: '', criteria: [{}]}]);
     const [activeFilterData, setActiveFilterData] = useState(getDefaultActiveFilter());
     //{name: '',selection:'',criteria: [Criterion]}
 
@@ -78,7 +78,7 @@ function App() {
     useEffect(() => {
         if (!hasData) return;
         if (!debug) return;
-        alertLog('app allData change '+JSON.stringify(allData))
+        alertLog('app allData change ' + JSON.stringify(allData))
     }, [allData]);
 
     return (
@@ -93,7 +93,7 @@ function App() {
                     <div className="center-content text-center">
                         <ExistingFilters
                             allData={allData}
-                            setAllData={setAllData }
+                            setAllData={setAllData}
                             onDataChange={receiveDataFromChild}
                             onChooseFilter={setActiveFilterData}
                         />

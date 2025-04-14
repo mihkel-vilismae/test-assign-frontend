@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/FilterForm.css';
 import ReactDOM from "react-dom/client";
 import Criterion, {getDefaultActiveFilter, getDefaultCriterion} from '../Entities/DataObjects';
@@ -8,11 +8,18 @@ import {c} from "react/compiler-runtime";
 import {debug, hasData} from "./ExistingFilters";
 import {alertLog} from "../App";
 
-const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onClose, onSave, allData, setAllData }, ref) => {
+const FilterForm = React.forwardRef(({
+                                         setActiveFilterData,
+                                         activeFilterData,
+                                         onClose,
+                                         onSave,
+                                         allData,
+                                         setAllData
+                                     }, ref) => {
     const [filterName, setFilterName] = useState('');
     const newFilterFormRef = useRef(null);
     const [form, setForm] = useState(null);
-   // if (!activeFilterData)
+    // if (!activeFilterData)
     const [criteria, setCriteria] = useState([]);
 
     //const [internalFilterData, setInternalFilterData] = useState({});
@@ -43,10 +50,9 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
     };
 
 
-
-   /* function emptyForm() {
-        setActiveFilterData(getDefaultActiveFilter())
-    }*/
+    /* function emptyForm() {
+         setActiveFilterData(getDefaultActiveFilter())
+     }*/
 
 
 //--------------------------------------------
@@ -57,8 +63,8 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
         closeModal();
     }*/
     function saveForm() {
-        alertLog('act '+ JSON.stringify(activeFilterData))
-        alertLog('allA '+ JSON.stringify(allData))
+        alertLog('act ' + JSON.stringify(activeFilterData))
+        alertLog('allA ' + JSON.stringify(allData))
         const filterToEdit = findFilterById(activeFilterData.id);
         saveActiveFilter(activeFilterData);
         //alertLog('filterToEdit '+ filterToEdit)
@@ -75,19 +81,17 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
     useEffect(() => {
         if (!hasData) return;
         if (!debug) return;
-        alertLog('filrewform allData ch '+JSON.stringify(allData))
-    }   , [allData]);
+        alertLog('filrewform allData ch ' + JSON.stringify(allData))
+    }, [allData]);
 
     // logggiong
     useEffect(() => {
         if (!hasData) return;
         if (!debug) return;
-        alertLog('setActiveFilterData' +JSON.stringify(activeFilterData))
+        alertLog('setActiveFilterData' + JSON.stringify(activeFilterData))
         setActiveFilterData(activeFilterData);
-        alertLog('all' +JSON.stringify(allData))
+        alertLog('all' + JSON.stringify(allData))
     }, [activeFilterData]);
-
-
 
 
     function addFilterCriteriaRow() {
@@ -95,18 +99,19 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
             activeFilterData = createActiveFilterData();
         }
         const newCriterion = getDefaultCriterion();
-        alertLog('newCriterion '+JSON.stringify(newCriterion))
-       // setCriteria([...criteria, newCriterion]);
+        alertLog('newCriterion ' + JSON.stringify(newCriterion))
+        // setCriteria([...criteria, newCriterion]);
         const updatedCriteria = [...activeFilterData.criteria, newCriterion];
-        setActiveFilterData({ ...activeFilterData, criteria: updatedCriteria });
+        setActiveFilterData({...activeFilterData, criteria: updatedCriteria});
         alertLog('mew rpw ')
     }
 
     function createActiveFilterData() {
         const defaultFilter = getDefaultActiveFilter();
-        alert('def '+JSON.stringify(defaultFilter ))
+        alert('def ' + JSON.stringify(defaultFilter))
         return defaultFilter;
     }
+
     // find item from allData array using ID value
 
     const findFilterById = (filterId) => {
@@ -117,7 +122,7 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
     const saveActiveFilter = (newData) => {
         const filterId = newData.id;
         const isNew = !findFilterById(filterId);
-        alertLog('isNew:: '+ isNew)
+        alertLog('isNew:: ' + isNew)
         if (isNew) {
             activeFilterData = newData;
             allData.push(activeFilterData);
@@ -138,8 +143,8 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
             setActiveFilterData(defaultActiveFilter);
             activeFilterData = defaultActiveFilter;
         }
-        alertLog('Form:handleFormDataChange : '+JSON.stringify({ ...activeFilterData, [name]: value }))
-        setActiveFilterData({ ...activeFilterData, [name]: value });
+        alertLog('Form:handleFormDataChange : ' + JSON.stringify({...activeFilterData, [name]: value}))
+        setActiveFilterData({...activeFilterData, [name]: value});
     };
 
     return (
@@ -166,19 +171,19 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
                     <span onClick={onClose} className="close">✖</span>
                 </div>
 
-                    <div className="modal-content">
+                <div className="modal-content">
 
-                        <div className="form-row form-group">
-                            <label>Filter name {activeFilterData?.id}</label>
-                            <input id="filterName" className="input-field form-control" type="text"
-                                   value={activeFilterData?.name}
-                                   onChange={(e) => handleFormDataChange('name', e.target.value)}/>
-                        </div>
+                    <div className="form-row form-group">
+                        <label>Filter name {activeFilterData?.id}</label>
+                        <input id="filterName" className="input-field form-control" type="text"
+                               value={activeFilterData?.name}
+                               onChange={(e) => handleFormDataChange('name', e.target.value)}/>
+                    </div>
 
 
-                        <div className="form-row form-group">
-                            <label> {activeFilterData?.criteria.length} Criteria</label>
-                            <span className="criteria-container">
+                    <div className="form-row form-group">
+                        <label> {activeFilterData?.criteria.length} Criteria</label>
+                        <span className="criteria-container">
                             {activeFilterData?.criteria.map((criterion) => (
                                 <div>
                                     <CriteriaRow
@@ -191,44 +196,44 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
                                 </div>
                             ))}
                         </span>
-                        </div>
-
-                        <div className="form-row form-group text-center">
-                            <button className="mx-auto btn btn-light" onClick={addFilterCriteriaRow}>+ Add Row</button>
-                        </div>
-
-                        <div className="form-row form-group">
-                            <label className="form-label">Usage</label>
-                            <div className="radio-group">
-                                <label className="radio-label form-check">
-                                    <input type="radio" name="selection" value="common"
-                                           checked={activeFilterData?.selection === 'common'}
-                                           onChange={() => handleFormDataChange('selection', 'common')}
-                                           className="form-check-input"/>Common
-                                </label>
-                                <label className="radio-label form-check">
-                                    <input type="radio" name="selection" value="rare"
-                                           checked={activeFilterData?.selection === 'rare'}
-                                           onChange={() => handleFormDataChange('selection', 'rare')}
-                                           className="form-check-input"/>Rare
-                                </label>
-                                <label className="radio-label form-check">
-                                    <input type="radio" name="selection" value="special"
-                                           checked={activeFilterData?.selection === 'special'}
-                                           onChange={() => handleFormDataChange('selection', 'special')}
-                                           className="form-check-input"/>Special
-                                </label>
-                            </div>
-                        </div>
                     </div>
 
-                    <div className="modal-footer">
-                        <button onClick={saveForm} className="btn btn-footer btn-secondary">SAVE</button>
-                        <button onClick={onClose} className="btn btn-footer btn-secondary">CLOSE</button>
+                    <div className="form-row form-group text-center">
+                        <button className="mx-auto btn btn-light" onClick={addFilterCriteriaRow}>+ Add Row</button>
+                    </div>
+
+                    <div className="form-row form-group">
+                        <label className="form-label">Usage</label>
+                        <div className="radio-group">
+                            <label className="radio-label form-check">
+                                <input type="radio" name="selection" value="common"
+                                       checked={activeFilterData?.selection === 'common'}
+                                       onChange={() => handleFormDataChange('selection', 'common')}
+                                       className="form-check-input"/>Common
+                            </label>
+                            <label className="radio-label form-check">
+                                <input type="radio" name="selection" value="rare"
+                                       checked={activeFilterData?.selection === 'rare'}
+                                       onChange={() => handleFormDataChange('selection', 'rare')}
+                                       className="form-check-input"/>Rare
+                            </label>
+                            <label className="radio-label form-check">
+                                <input type="radio" name="selection" value="special"
+                                       checked={activeFilterData?.selection === 'special'}
+                                       onChange={() => handleFormDataChange('selection', 'special')}
+                                       className="form-check-input"/>Special
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            );
-            });
 
-            export default FilterForm;
+                <div className="modal-footer">
+                    <button onClick={saveForm} className="btn btn-footer btn-secondary">SAVE</button>
+                    <button onClick={onClose} className="btn btn-footer btn-secondary">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+export default FilterForm;

@@ -1,67 +1,67 @@
 /* App.css */
 .app-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .centered-content {
-  width: 100% ;
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 8px;
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .rect-area {
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 #existing-filters {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #existing-filters th,
 #existing-filters td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
 }
 
 .center-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
 }
 
 /**modal**/
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .upper-button-container {
-  margin-right: auto;
-  margin-left: auto;
-  display: table;
+    margin-right: auto;
+    margin-left: auto;
+    display: table;
 }
