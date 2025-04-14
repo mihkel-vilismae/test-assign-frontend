@@ -30,6 +30,7 @@ function App() {
     const formContentRef = useRef(null); // Ref to access the FilterForm in the modal
     const [internalFilterData, setInternalFilterData] = useState({});
 
+
     const openModal = () => {
         setShowModal(true);
     };
@@ -38,11 +39,16 @@ function App() {
         setShowModal(false);
     };
 
-    const handleSave = () => {
-        const updatedFilterData = modalContentRef.current.getFilterData();
-        setFilterData(updatedFilterData);
-        closeModal();
-    };
+    const handleClose = () => {
+        emptyForm();
+      if (showModal)
+          closeModal();
+    }
+
+    function emptyForm() {
+        setActiveFilterData(getDefaultActiveFilter())
+    }
+
 
     const filterValuesChanged = (data) => {
         alertLog('Filter Values Changed: ' + JSON.stringify(data));
@@ -90,31 +96,32 @@ function App() {
                             allData={allData}
                             setAllData={setAllData }
                             onDataChange={receiveDataFromChild}
-                            onChooseFilter={setActiveFilterData}/>
+                            onChooseFilter={setActiveFilterData}
+                        />
                     </div>
                 </div>
                 <div className="rect-area alert alert-info" id="add-filter">
                     <div className="center-content text-center">
                         <FilterForm
-                            /*filterData={editFilterFromChild}
-                            onChange={filterValuesChanged}*/
                             ref={formContentRef}
                             allData={allData}
                             setAllData={setAllData}
                             activeFilterData={activeFilterData}
                             setActiveFilterData={setActiveFilterData}
+                            onClose={handleClose}
                         />
                     </div>
                 </div>
-                <Modal isOpen={showModal} onClose={closeModal} onSave={handleSave}>
+                <Modal
+                    isOpen={showModal}
+                >
                     <FilterForm
                         ref={modalContentRef}
-                       /* filterData={editFilterFromChild}
-                        onChange={filterValuesChanged}*/
                         allData={allData}
                         setAllData={setAllData}
                         activeFilterData={activeFilterData}
                         setActiveFilterData={setActiveFilterData}
+                        onClose={handleClose}
                     />
                 </Modal>
             </div>

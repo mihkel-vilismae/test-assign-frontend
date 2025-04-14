@@ -16,7 +16,7 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
 
         setActiveFilterData((prevData) => ({
             ...prevData,
-            criteria: prevData.criteria.map((prevCrit) => (prevCrit.id === updatedCriterion.id ? updatedCriterion : prevCrit)),
+            criteria: prevData.criteria.map((prevCrit, i) => (prevCrit.id === updatedCriterion.id ? updatedCriterion : prevCrit)),
         }));
     };
 
@@ -119,17 +119,6 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
                 return dateSelectionCode();
         }
     };
-
-    /*
-    //generateCriterionFromRow is used to generate the criterion object from the current row state
-    const generateCriterionFromRow = () => {
-        return {
-            id: criterion.id,
-            type: criterion.type,
-            comparator: criterion.comparator,
-            value: criterion.value
-        };
-    };*/
 
     const handleRemove = () => {
         if (!criterion) {

@@ -23,7 +23,7 @@ export function getDefaultCriterion() {
 }
 
 export function getDefaultActiveFilter() {
-    return  new ActiveFilter(Date.now(), '-', 'common', []);
+    return new ActiveFilter(Date.now(), '', 'common', []);
 }
 
 export function getTypeComparator(type) {

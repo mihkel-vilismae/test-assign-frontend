@@ -8,7 +8,7 @@ import {c} from "react/compiler-runtime";
 import {debug, hasData} from "./ExistingFilters";
 import {alertLog} from "../App";
 
-const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, filterData, onChange, allData, setAllData }, ref) => {
+const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onClose, onSave, allData, setAllData }, ref) => {
     const [filterName, setFilterName] = useState('');
     const newFilterFormRef = useRef(null);
     const [form, setForm] = useState(null);
@@ -42,23 +42,20 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, fil
         alertLog(JSON.stringify(activeFilterData.criteria))*/
     };
 
-    function showForm() {
-        emptyForm();
-        if (form) {
-            form.setAttribute('style', 'display: block;');
-        }
-    }
 
-    function emptyForm() {
-        setFilterName('');
-        setCriteria([]);
-    }
+
+   /* function emptyForm() {
+        setActiveFilterData(getDefaultActiveFilter())
+    }*/
 
 
 //--------------------------------------------
-    function closeForm() {
+    /*function closeForm() {
         alertLog('closeForm')
-    }
+        alert('closeForm')
+        emptyForm();
+        closeModal();
+    }*/
     function saveForm() {
         alertLog('act '+ JSON.stringify(activeFilterData))
         alertLog('allA '+ JSON.stringify(allData))
@@ -167,7 +164,7 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, fil
                     <div
                         className={'bg-color2'}>{allData && activeFilterData?.id ? JSON.stringify(allData.filter(item => item.id === activeFilterData.id), null, 2) : 'no filter selected'}
                     </div>
-                    <span onClick={closeForm} className="close">✖</span>
+                    <span onClick={onClose} className="close">✖</span>
                 </div>
 
                     <div className="modal-content">
@@ -228,7 +225,7 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, fil
 
                     <div className="modal-footer">
                         <button onClick={saveForm} className="btn btn-footer btn-secondary">SAVE</button>
-                        <button onClick={closeForm} className="btn btn-footer btn-secondary">CLOSE</button>
+                        <button onClick={onClose} className="btn btn-footer btn-secondary">CLOSE</button>
                     </div>
                 </div>
             </div>
