@@ -42,7 +42,7 @@ function FilterForm({
                 );
             });
         alert(JSON.stringify(newData))
-        saveDataToDatabase(newData).then(r => console.log(r));
+        saveDataToDatabase(newData).then(r => {});
     };
 
     const handleFormDataChange = (name, value) => {
@@ -53,7 +53,6 @@ function FilterForm({
         setActiveFilterData(filterData);
         setLoading(true);
         setError(null);
-        console.log(filterData)
         const isCreate = filterData.id === null;
         const isUpdate = !isCreate;
         const url = isCreate ? Database.getCreateUrl() : Database.getUpdateUrl(filterData.id);
@@ -74,8 +73,6 @@ function FilterForm({
                 return response.json();
             })
             .then((resultFilter) => {
-                console.log('resultFilter',resultFilter)
-
                 if (!Array.isArray(resultFilter.criteria))
                     resultFilter.criteria=Array.from(resultFilter.criteria)
 
@@ -89,12 +86,10 @@ function FilterForm({
                     //existingFilter = resultFilter;
                 }
                 setActiveFilterData(resultFilter);
-                console.log(resultFilter)
 
                 return resultFilter;
             })
             .catch((error) => {
-                console.error('Error saving data:', error);
                 setError(error);
                 throw error;
             })
