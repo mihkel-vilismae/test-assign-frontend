@@ -1,51 +1,48 @@
-// ExistingFilters.js
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Database from '../Database';
-import {alertLog} from "../App";
+import { alertLog } from "../App";
 
 export var hasData = false;
 export var debug = false;
 
-function ExistingFilters({onChooseFilter: setActiveFilterData, setAllData, allData}) {
-    const [loading, setLoading] = useState(true); // Add loading state
-    const [error, setError] = useState(null);     // Add error state
+function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allData }) {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Function to handle the "edit filter" button click
     const handleEdit = (filter) => {
-        setActiveFilterData(filter); // Call the callback function and pass the data
+        setActiveFilterData(filter);
     };
 
-    // Fetch existing filters from the API when the component mounts
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true); // Set loading to true before fetching
-            setError(null);    // Clear any previous errors
+            setLoading(true);
+            setError(null);
 
             try {
                 const response = await fetch(Database.GET);
-                if (!response.ok) { // Check for HTTP errors
+                if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
                 if (debug)
-                    alertLog('from db: ' + JSON.stringify(data))
+                    alertLog('from db: ' + JSON.stringify(data));
                 hasData = true;
                 setAllData(data);
             } catch (error) {
-                setError(error);  // Set the error state
+                setError(error);
             } finally {
-                setLoading(false); // Set loading to false after fetching (regardless of success or failure)
+                setLoading(false);
             }
         };
         fetchData();
-    }, []);
+    }, [setAllData]);
 
     if (loading) {
-        return <div>Loading filters...</div>; // Display loading message
+        return <div>Loading filters...</div>;
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>; // Display error message
+        return <div>Error: {error.message}</div>;
     }
 
     return (
@@ -67,7 +64,7 @@ function ExistingFilters({onChooseFilter: setActiveFilterData, setAllData, allDa
                     <td>{filter.selection}</td>
                     <td>
                         <ul className="list-unstyled">
-                            {filter.criteria.map((criterion) => (
+                            {(filter.criteria || []).map((criterion) => (
                                 <li key={criterion.id}>
                                     {criterion.type} {criterion.comparator} {criterion.value}
                                 </li>

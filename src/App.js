@@ -7,12 +7,6 @@ import FilterForm from "./components/FilterForm";
 import {Modal} from "./components/Modal";
 import {getDefaultActiveFilter} from "./Entities/DataObjects";
 
-export const criteria = {
-    id: '',
-    type: '',
-    comparator: '',
-    value: ''
-};
 export const showAlert = false;
 export const alertLog = (text) => {
     if (!showAlert) return
@@ -22,7 +16,6 @@ export const alertLog = (text) => {
 function App() {
 
     const [editFilterFromChild, setEditFilterFromChild] = useState(null);
-    const [filters, setFilters] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [filterData, setFilterData] = useState({}); // State to hold filter data
     const modalContentRef = useRef(null); // Ref to access the FilterForm in the modal
@@ -47,7 +40,6 @@ function App() {
     function emptyForm() {
         setActiveFilterData(getDefaultActiveFilter())
     }
-
 
     const filterValuesChanged = (data) => {
         alertLog('Filter Values Changed: ' + JSON.stringify(data));

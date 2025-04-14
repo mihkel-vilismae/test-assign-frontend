@@ -3,14 +3,7 @@ import {getDefaultCriterion} from '../Entities/DataObjects';
 
 function CriteriaRow({
                          setActiveFilterData,
-                         activeFilterData,
                          filterCriteria,
-                         index,
-                         onChange,
-                         onRemove,
-                         id,
-                         allData,
-                         setAllData
                      }) {
     const [criterion, setCriterion] = useState(() => filterCriteria || getDefaultCriterion());
 
@@ -130,7 +123,7 @@ function CriteriaRow({
 
     const handleRemoveCriterion = () => {
         if (!criterion) {
-            console.error(`Cannot remove criterion at index ${index}: criterion is null or undefined.`);
+            console.error(`Cannot remove criterion  ${criterion.id}: criterion is null or undefined.`);
             return;
         }
 
