@@ -5,8 +5,7 @@ import './App.css';
 import ExistingFilters, {debug, hasData} from "./components/ExistingFilters";
 import FilterForm from "./components/FilterForm";
 import {Modal} from "./components/Modal";
-import * as Database from "./Database";
-import Criterion, {getDefaultActiveFilter} from "./Entities/Criterion";
+import {getDefaultActiveFilter} from "./Entities/DataObjects";
 
 export const criteria = {
     id: '',

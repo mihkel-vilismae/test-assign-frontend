@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getDefaultCriterion } from '../Entities/Criterion';
+import { getDefaultCriterion } from '../Entities/DataObjects';
 
 function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, index, onChange, onRemove, id, allData,setAllData }) {
-    //alertlog('CriteriaRow: ->'+JSON.stringify(filterCriteria));
     const [criterion, setCriterion] = useState(() => filterCriteria || getDefaultCriterion());
 
     useEffect(() => {
-        //setCriterion(filterCriteria || getDefaultCriterion());
         setCriterion(filterCriteria );
     }, [filterCriteria]);
 
@@ -120,7 +118,7 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
         }
     };
 
-    const handleRemove = () => {
+    const handleRemoveCriterion = () => {
         if (!criterion) {
             console.error(`Cannot remove criterion at index ${index}: criterion is null or undefined.`);
             return;
@@ -142,7 +140,7 @@ function CriteriaRow({ setActiveFilterData, activeFilterData, filterCriteria, in
 
             {getTypeComparators()}
 
-            <span className="remove-criteria" onClick={handleRemove}>✖</span>
+            <span className="remove-criteria" onClick={handleRemoveCriterion}>✖</span>
         </div>
     );
 }

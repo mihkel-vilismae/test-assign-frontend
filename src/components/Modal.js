@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Modal({isOpen, onClose, children, onSave}) {
+export function Modal({isOpen, onClose, children}) {
     if (!isOpen) {
         return null;
     }

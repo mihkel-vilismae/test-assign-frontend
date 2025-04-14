@@ -13,7 +13,6 @@ export class ActiveFilter {
         this.name = name
         this.selection = selection
         this.criteria = criteria
-
     }
 }
 
@@ -24,18 +23,6 @@ export function getDefaultCriterion() {
 
 export function getDefaultActiveFilter() {
     return new ActiveFilter(Date.now(), '', 'common', []);
-}
-
-export function getTypeComparator(type) {
-    switch (type) {
-        case 'amount':
-        default:
-            return ['more', 'less', 'equals'];
-        case 'title':
-            return ['starts_with', 'contains', 'ends_with'];
-        case 'date':
-            return ['to', 'from', 'exactly'];
-    }
 }
 
 export default Criterion;

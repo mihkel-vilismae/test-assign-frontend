@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/FilterForm.css';
 import ReactDOM from "react-dom/client";
-import Criterion, {getDefaultActiveFilter, getDefaultCriterion} from '../Entities/Criterion';
+import Criterion, {getDefaultActiveFilter, getDefaultCriterion} from '../Entities/DataObjects';
 import CriteriaRow from "./CriteriaRow";
-import criterion from "../Entities/Criterion";
+import criterion from "../Entities/DataObjects";
 import {c} from "react/compiler-runtime";
 import {debug, hasData} from "./ExistingFilters";
 import {alertLog} from "../App";
@@ -140,7 +140,6 @@ const FilterForm = React.forwardRef(({setActiveFilterData, activeFilterData, onC
         }
         alertLog('Form:handleFormDataChange : '+JSON.stringify({ ...activeFilterData, [name]: value }))
         setActiveFilterData({ ...activeFilterData, [name]: value });
-
     };
 
     return (
