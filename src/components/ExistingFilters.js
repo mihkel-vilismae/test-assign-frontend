@@ -11,6 +11,25 @@ function ExistingFilters({ onChooseFilter: setActiveFilterData, setAllData, allD
     };
 
     useEffect(() => {
+        // Option 1: Use relative path
+        fetch('/api/filters/get').then(r => logg(1, r, "1: Use relative path"))
+
+// Option 2: Use localhost
+        fetch('http://localhost/api/filters/get').then(r => logg(2, r, "r Option 2: Use localhost"))
+
+// Option 3: If using a specific service name
+        fetch('http://nginx/api/filters/get').then(r => logg(3, r, "Option 3: If using a specific service name"))
+
+    },[]);
+
+    function logg(i, respo,text) {
+        console.error("------------d")
+        console.error(i,text)
+        console.error(respo)
+        console.error("------------d")
+    }
+
+    useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
